@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YM1ELQWQLV"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-YM1ELQWQLV');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open House Sign-In - OpenHouseAI</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { navy: '#1B2A41', gold: '#C5A059', alabaster: '#F9F9F7' },
+                    fontFamily: { serif: ['Playfair Display', 'serif'], body: ['Lato', 'sans-serif'] },
+                    animation: { 'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #F9F9F7; font-family: 'Lato', sans-serif; }
+        .glass { background: rgba(27, 42, 65, 0.90); backdrop-filter: blur(10px); }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #C5A059; border-radius: 10px; }
+    </style>
+</head>
+<body class="text-navy overflow-hidden h-screen w-full relative">
+
+    <div id="app" class="h-full w-full flex flex-col relative"></div>
+
+    <div id="menuOverlay" class="fixed inset-0 z-50 invisible opacity-0 transition-all duration-300">
+        <div id="menuOverlayBg" class="absolute inset-0 bg-navy/60 backdrop-blur-sm"></div>
+        <div id="menuPanel" class="absolute right-0 top-0 h-full w-80 bg-white shadow-2xl transition-transform duration-300 translate-x-full flex flex-col">
+            <div class="p-8 bg-navy text-white flex justify-between items-center">
+                <h2 class="text-2xl font-serif uppercase tracking-tight">Admin Menu</h2>
+                <button id="menuCloseBtn" class="p-2 hover:bg-white/10 rounded-full text-xl">✕</button>
+            </div>
+            <div class="flex-1 py-4 flex flex-col">
+                <button id="showVisitorsModalBtn" class="flex items-center gap-4 px-8 py-5 hover:bg-alabaster border-b border-gray-100 transition-colors">
+                    <span class="text-xl">👥</span><span class="font-bold uppercase text-xs tracking-widest flex-1 text-left">View Visitors</span>
+                    <span id="menuVisitorCount" class="bg-gold text-white text-[10px] font-black px-2 py-0.5 rounded-full">0</span>
+                </button>
+                
+                <button id="manualExportBtnMenu" class="flex items-center gap-4 px-8 py-5 hover:bg-alabaster border-b border-gray-100 transition-colors">
+                    <span class="text-xl">📋</span><span class="font-bold uppercase text-xs tracking-widest text-left">Copy Data (Free)</span>
+                </button>
+
+                <a href="https://buy.stripe.com/bJefZhc6o9Aw9QP9IodMI00" target="_blank" class="flex items-center gap-4 px-8 py-5 bg-green-50 hover:bg-green-100 border-b border-green-200 transition-colors group">
+                    <span class="text-xl">📥</span>
+                    <div class="flex flex-col text-left">
+                        <span class="font-bold uppercase text-xs tracking-widest text-green-800 group-hover:text-green-900">Download CSV</span>
+                        <span class="text-[10px] text-green-600 font-bold">$0.99 Instant</span>
+                    </div>
+                </a>
+
+                <div class="border-t border-gray-100 my-4 mx-6"></div>
+                <button id="editSetupBtn" class="flex items-center gap-4 px-8 py-5 hover:bg-alabaster border-b border-gray-100 transition-colors">
+                    <span class="text-xl">⚙️</span><span class="font-bold uppercase text-xs tracking-widest text-left">Edit Setup</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="visitorModal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
+        <div id="modalOverlayBg" class="absolute inset-0 bg-navy/90 backdrop-blur-md"></div>
+        <div class="bg-white w-full max-w-6xl h-[80vh] rounded-xl shadow-2xl relative flex flex-col animate-[fadeIn_0.3s_ease-out]">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                <h2 class="text-3xl font-serif text-navy">Guest List</h2>
+                <button id="modalCloseBtn" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600">✕</button>
+            </div>
+            <div class="flex-1 overflow-auto custom-scroll p-6">
+                <table class="w-full text-left border-collapse">
+                    <thead><tr class="text-xs font-bold text-gray-400 uppercase tracking-wider border-b-2 border-gray-100"><th class="pb-4 pl-4">Name</th><th class="pb-4">Contact</th><th class="pb-4">Source</th><th class="pb-4">Agent?</th><th class="pb-4 text-right pr-4">Time</th></tr></thead>
+                    <tbody id="visitorTableBody"></tbody>
+                </table>
+            </div>
+            <div class="p-6 border-t border-gray-100 bg-gray-50 rounded-b-xl flex justify-between items-center gap-4">
+                <span class="text-sm font-bold text-gray-500">Total: <span id="modalTotalCount" class="text-navy">0</span></span>
+                
+                <div class="flex gap-3">
+                    <button id="manualExportBtnModal" class="bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-lg text-sm font-bold uppercase tracking-wider hover:bg-gray-50 shadow-sm transition-colors">
+                        Copy Data (Free)
+                    </button>
+                    
+                    <a href="https://buy.stripe.com/bJefZhc6o9Aw9QP9IodMI00" target="_blank" class="bg-green-600 text-white px-6 py-3 rounded-lg text-sm font-bold uppercase tracking-wider hover:bg-green-700 shadow-lg flex items-center gap-2 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Download CSV ($0.99)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // --- STATE ---
+        const store = {
+            screen: 'SETUP',
+            config: { address: '', price: '', beds: '', baths: '', agent: '', phone: '', email: '', photo: null, headshot: null, logo: null },
+            visitors: [],
+            formData: {}
+        };
+
+        // --- CORE APP LOGIC ---
+        window.onload = () => {
+            const savedConfig = localStorage.getItem('estate_config_free');
+            const savedVisitors = localStorage.getItem('estate_visitors_free');
+            if (savedConfig) store.config = JSON.parse(savedConfig);
+            if (savedVisitors) store.visitors = JSON.parse(savedVisitors);
+            updateVisitorCounts();
+            render();
+        };
+
+        function navigate(screen) { store.screen = screen; store.formData = {}; render(); }
+
+        function render() {
+            const app = document.getElementById('app');
+            app.innerHTML = '';
+            let screenComponent;
+            switch(store.screen) {
+                case 'SETUP': screenComponent = renderSetup(); break;
+                case 'WELCOME': screenComponent = renderWelcome(); break;
+                case 'SIGN_IN': screenComponent = renderForm(); break;
+                case 'SUCCESS': screenComponent = renderSuccess(); break;
+                default: screenComponent = renderSetup();
+            }
+            app.appendChild(screenComponent);
+            attachEventListeners(store.screen);
+        }
+
+        function attachEventListeners(screen) {
+            // Global Listeners
+            const get = (id) => document.getElementById(id);
+            
+            get('menuOverlayBg')?.addEventListener('click', () => toggleMenu(false));
+            get('menuCloseBtn')?.addEventListener('click', () => toggleMenu(false));
+            get('showVisitorsModalBtn')?.addEventListener('click', showVisitorsModal);
+            
+            // LISTENER UPDATED TO MATCH HTML ID & NEW FUNCTION
+            get('manualExportBtnMenu')?.addEventListener('click', openCopyPasteModal);
+            
+            get('editSetupBtn')?.addEventListener('click', () => { navigate('SETUP'); toggleMenu(false); });
+            get('modalOverlayBg')?.addEventListener('click', hideVisitorsModal);
+            get('modalCloseBtn')?.addEventListener('click', hideVisitorsModal);
+            
+            // LISTENER UPDATED TO MATCH HTML ID & NEW FUNCTION
+            get('manualExportBtnModal')?.addEventListener('click', openCopyPasteModal);
+
+            // Screen-specific Listeners
+            switch(screen) {
+                case 'SETUP':
+                    get('startBtn')?.addEventListener('click', saveAndLaunch);
+                    get('viewVisitorsSetupBtn')?.addEventListener('click', showVisitorsModal);
+                    break;
+                case 'WELCOME':
+                    get('menuBtn')?.addEventListener('click', () => toggleMenu(true));
+                    get('startTourBtn')?.addEventListener('click', () => navigate('SIGN_IN'));
+                    break;
+                case 'SIGN_IN':
+                    get('cancelBtn')?.addEventListener('click', () => navigate('WELCOME'));
+                    document.querySelectorAll('[data-wizard-button]').forEach(btn => {
+                        btn.addEventListener('click', () => handleAnswer(btn.dataset.key, btn.dataset.val));
+                    });
+                    const wizardInput = get('wizardInput');
+                    get('wizardContinueBtn')?.addEventListener('click', () => handleAnswer(wizardInput.dataset.key, wizardInput.value));
+                    wizardInput?.addEventListener('keydown', e => { if(e.key === 'Enter') handleAnswer(wizardInput.dataset.key, wizardInput.value); });
+                    setTimeout(() => wizardInput?.focus(), 50);
+                    break;
+                case 'SUCCESS':
+                    get('nextGuestBtn')?.addEventListener('click', () => navigate('WELCOME'));
+                    break;
+            }
+        }
+
+        // --- 1. SETUP SCREEN ---
+        function renderSetup() {
+            const div = document.createElement('div');
+            div.className = "max-w-4xl w-full mx-auto p-4 md:p-8 fade-in overflow-y-auto h-full";
+            div.innerHTML = `
+                <div class="text-center mb-8">
+                    <h1 class="text-4xl md:text-5xl font-serif text-navy mb-2">Open House Set Up</h1>
+                    <p class="text-gray-400 uppercase tracking-widest text-xs font-bold">Digital Sign-In Sheet</p>
+                </div>
+                <div class="space-y-6 bg-white p-6 md:p-10 rounded-2xl shadow-xl border border-gray-100">
+                    <div class="flex flex-col md:flex-row gap-6 h-auto md:h-48">
+                        ${renderUploadBox('listingInput', 'photo', '📸 Listing Photo', 'w-full md:w-auto md:flex-[2] aspect-video h-40 md:h-48')}
+                        <div class="flex gap-4 md:contents">
+                            ${renderUploadBox('logoInput', 'logo', '🏢 Logo', 'w-1/2 md:w-auto md:flex-1 aspect-square h-40 md:h-48')}
+                            ${renderUploadBox('headshotInput', 'headshot', '👤 Headshot', 'w-1/2 md:w-auto md:flex-1 aspect-square h-40 md:h-48')}
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block text-xs font-bold text-gold uppercase mb-2">Property Address</label>
+                            <input type="text" id="inpAddress" value="${store.config.address || ''}" class="w-full p-4 bg-alabaster border-none rounded-lg focus:ring-2 focus:ring-gold outline-none font-serif text-lg" placeholder="e.g. 123 Luxury Lane, Beverly Hills, CA">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gold uppercase mb-2">Price</label>
+                            <input type="text" id="inpPrice" value="${store.config.price || ''}" class="w-full p-4 bg-alabaster border-none rounded-lg focus:ring-2 focus:ring-gold outline-none" placeholder="$1,250,000">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="block text-xs font-bold text-gold uppercase mb-2">Beds</label><input type="text" id="inpBeds" value="${store.config.beds || ''}" class="w-full p-4 bg-alabaster border-none rounded-lg focus:ring-2 focus:ring-gold outline-none"></div>
+                            <div><label class="block text-xs font-bold text-gold uppercase mb-2">Baths</label><input type="text" id="inpBaths" value="${store.config.baths || ''}" class="w-full p-4 bg-alabaster border-none rounded-lg focus:ring-2 focus:ring-gold outline-none"></div>
+                        </div>
+                        <div class="col-span-1 md:col-span-2 border-t border-gray-100 my-2"></div>
+                        <div class="col-span-1"><label class="block text-xs font-bold text-gold uppercase mb-2">Agent Name</label><input type="text" id="inpAgent" value="${store.config.agent || ''}" class="w-full p-4 bg-alabaster border-none rounded-lg focus:ring-2 focus:ring-gold outline-none"></div>
+                        <div class="col-span-1"><label class="block text-xs font-bold text-gold uppercase mb-2">Agent Email</label><input type="text" id="inpEmail" value="${store.config.email || ''}" class="w-full p-4 bg-alabaster border-none rounded-lg focus:ring-2 focus:ring-gold outline-none"></div>
+                        <div class="col-span-1 md:col-span-2"><label class="block text-xs font-bold text-gold uppercase mb-2">Agent Phone</label><input type="text" id="inpPhone" value="${store.config.phone || ''}" class="w-full p-4 bg-alabaster border-none rounded-lg focus:ring-2 focus:ring-gold outline-none"></div>
+                    </div>
+                    <button id="startBtn" class="w-full py-5 bg-navy text-white rounded-xl font-bold uppercase tracking-widest hover:bg-gold transition-colors shadow-lg mt-8">START OPEN HOUSE</button>
+                    <div class="text-center mt-4"><button id="viewVisitorsSetupBtn" class="text-xs font-bold text-gray-400 uppercase hover:text-navy underline">View Current Visitors</button></div>
+                </div>
+            `;
+            return div;
+        }
+
+        function renderUploadBox(id, key, label, classes) {
+            const hasImg = store.config[key];
+            return `<div class="relative group cursor-pointer bg-alabaster rounded-xl border-2 border-dashed border-gray-200 hover:border-gold flex items-center justify-center overflow-hidden transition-all ${classes}" onclick="document.getElementById('${id}').click()">
+                ${hasImg ? `<img src="${hasImg}" class="w-full h-full object-cover">` : `<div class="text-center"><div class="text-2xl mb-2 grayscale opacity-50">${label.split(' ')[0]}</div><div class="text-[10px] font-bold text-navy uppercase tracking-widest">${label.split(' ').slice(1).join(' ')}</div></div>`}
+                <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-white text-xs font-bold uppercase">Change</div>
+                <input type="file" id="${id}" class="hidden" accept="image/*" onchange="handleImage(event, '${key}')">
+            </div>`;
+        }
+
+        // --- 2. WELCOME SCREEN ---
+        function renderWelcome() {
+            const div = document.createElement('div');
+            div.className = "h-full w-full flex flex-col";
+            const bgStyle = store.config.photo ? `background-image: url('${store.config.photo}');` : 'background-color: #1B2A41;';
+            const logoHtml = store.config.logo ? `<img src="${store.config.logo}" class="w-[150px] object-contain">` : '<div></div>';
+
+            div.innerHTML = `
+                <div class="absolute inset-0 bg-cover bg-center transition-all duration-1000" style="${bgStyle}"><div class="absolute inset-0 bg-navy/85"></div></div>
+                <div class="relative z-10 w-full p-8 flex justify-between items-start fade-in">
+                    ${logoHtml} <button id="menuBtn" class="bg-white/10 backdrop-blur-md border border-white/20 text-white w-12 h-12 rounded-full hover:bg-white hover:text-navy transition-all flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+                </div>
+                <div class="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 fade-in w-full max-w-5xl mx-auto">
+                    <div class="text-center">
+                        <p class="text-gold font-bold uppercase tracking-[0.3em] text-sm mb-4">Welcome to</p>
+                        <h1 class="text-5xl md:text-6xl font-serif text-white mb-6 leading-tight">${store.config.address || 'Open House'}</h1>
+                        <div class="flex flex-wrap justify-center gap-4 text-gray-300 font-light text-lg mb-8">
+                            <span class="whitespace-nowrap">${store.config.price || ''}</span>
+                            ${store.config.beds ? `<span class="hidden sm:inline">•</span><span class="whitespace-nowrap">${store.config.beds} Beds</span>` : ''}
+                            ${store.config.baths ? `<span class="hidden sm:inline">•</span><span class="whitespace-nowrap">${store.config.baths} Baths</span>` : ''}
+                        </div>
+                        <button id="startTourBtn" class="group relative px-10 py-5 bg-gold text-white font-bold uppercase tracking-widest rounded-full overflow-hidden shadow-2xl shadow-gold/30 transition-transform hover:scale-105 active:scale-95">
+                            <span class="relative z-10">Sign In</span><div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                        </button>
+                    </div>
+                </div>
+                <div class="relative z-20 w-full p-8 flex flex-col md:flex-row items-end justify-between gap-6 fade-in pb-12">
+                    <div class="hidden md:flex flex-col items-center gap-2">
+                        <div class="bg-white p-3 rounded-xl shadow-2xl h-[154px] w-[154px] flex items-center justify-center"><div id="qrcode"></div></div>
+                        <div class="text-[10px] text-white/80 font-bold uppercase tracking-widest bg-navy/50 px-3 py-1 rounded backdrop-blur-sm shadow-sm">Map Property</div>
+                    </div>
+                    <div class="glass px-8 rounded-2xl flex items-center gap-6 border border-white/10 shadow-2xl max-w-md w-full md:w-auto h-[154px]">
+                        ${store.config.headshot ? `<img src="${store.config.headshot}" class="w-24 h-24 rounded-full object-cover border-2 border-gold shadow-lg">` : ''}
+                         <div class="text-left flex flex-col justify-center h-full py-4">
+                            <div class="text-white font-serif text-2xl leading-tight mb-2">${store.config.agent || ''}</div>
+                            <div class="text-gold text-[11px] font-bold uppercase tracking-widest flex flex-col gap-1">
+                                <span>${store.config.phone || ''}</span>
+                                <span class="opacity-90 lowercase" style="text-transform: none;">${store.config.email || ''}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hidden md:block w-[154px]"></div> 
+                </div>`;
+
+            setTimeout(() => { 
+                if(store.config.address) {
+                    const qrContainer = document.getElementById("qrcode");
+                    if (!qrContainer) return;
+                    qrContainer.innerHTML = ""; 
+                    new QRCode(qrContainer, { 
+                        text: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(store.config.address), 
+                        width: 128, height: 128, correctLevel : QRCode.CorrectLevel.H
+                    }); 
+                }
+            }, 100);
+            return div;
+        }
+
+        // --- 3. FORM ---
+        const questions = [
+            { id: 'name', label: "Full Name?", type: 'text', placeholder: 'First & Last Name' },
+            { id: 'email', label: "Email Address?", type: 'email', placeholder: 'name@example.com' },
+            { id: 'phone', label: "Phone Number?", type: 'tel', placeholder: '(555) 000-0000' },
+            { id: 'source', label: "How did you find us?", type: 'select', options: ['Zillow / Trulia', 'Sign Board', 'Social Media', 'Referral', 'Agent'] },
+            { id: 'hasAgent', label: "Are you represented?", type: 'select', options: ['Yes, I have an agent', 'No, I am unrepresented', 'Just looking'] }
+        ];
+        let currentStep = 0;
+
+        function renderForm() {
+            const div = document.createElement('div');
+            div.className = "h-full w-full flex flex-col bg-white fade-in";
+            const q = questions[currentStep];
+            const progress = ((currentStep + 1) / questions.length) * 100;
+            let inputHTML = q.type === 'select' 
+                ? `<div class="grid gap-3 w-full max-w-md">${q.options.map(opt => `<button data-wizard-button data-key="${q.id}" data-val="${opt}" class="w-full text-left p-5 rounded-xl border border-gray-200 hover:border-gold hover:bg-gold/5 transition-all font-bold text-navy flex justify-between group"><span class="group-hover:translate-x-1 transition-transform">${opt}</span><span class="text-gold opacity-0 group-hover:opacity-100">→</span></button>`).join('')}</div>` 
+                : `<input type="${q.type}" id="wizardInput" data-key="${q.id}" class="w-full max-w-md bg-transparent border-b-2 border-gray-200 focus:border-navy text-3xl py-4 outline-none font-serif text-center mb-8 placeholder-gray-300" placeholder="${q.placeholder}" autofocus>
+                   <button id="wizardContinueBtn" class="px-10 py-4 bg-navy text-white rounded-xl font-bold uppercase tracking-widest hover:bg-gold transition-colors">Continue</button>`;
+
+            div.innerHTML = `<div class="h-1 bg-gray-100 w-full"><div class="h-full bg-gold transition-all duration-500" style="width: ${progress}%"></div></div><div class="flex-1 flex flex-col items-center justify-center p-8 text-center relative"><button id="cancelBtn" class="absolute top-8 left-8 text-xs font-bold text-gray-400 hover:text-navy uppercase tracking-widest">← Cancel</button><div class="mb-4 text-gold font-bold uppercase tracking-widest text-xs">Step ${currentStep + 1} of ${questions.length}</div><h2 class="text-4xl md:text-5xl font-serif text-navy mb-3">${q.label}</h2>${inputHTML}</div>`;
+            return div;
+        }
+
+        function handleAnswer(key, val) { if(!val) return; store.formData[key] = val; if(currentStep < questions.length-1) { currentStep++; render(); } else { saveVisitor(); } }
+        function saveVisitor() { const v = { ...store.formData, timestamp: new Date().toLocaleString() }; store.visitors.push(v); localStorage.setItem('estate_visitors_free', JSON.stringify(store.visitors)); updateVisitorCounts(); currentStep=0; navigate('SUCCESS'); }
+
+        // --- 4. SUCCESS ---
+        function renderSuccess() {
+            const div = document.createElement('div');
+            div.className = "h-full w-full flex flex-col items-center justify-center bg-navy text-white text-center p-8 fade-in";
+            div.innerHTML = `<div class="w-24 h-24 rounded-full border-2 border-gold flex items-center justify-center text-4xl mb-8 text-gold">✦</div><h1 class="text-5xl md:text-6xl font-serif mb-6">You're All Set</h1><p class="text-white/60 text-lg mb-12 max-w-md">Thank you for registering. Please feel free to tour the property.</p><button id="nextGuestBtn" class="px-10 py-4 bg-gold text-white rounded-xl font-bold uppercase tracking-widest hover:bg-white hover:text-navy transition-colors">Next Guest</button>`;
+            return div;
+        }
+
+        // --- UTILS ---
+        function saveAndLaunch() {
+            store.config.address = document.getElementById('inpAddress').value;
+            store.config.price = document.getElementById('inpPrice').value;
+            store.config.beds = document.getElementById('inpBeds').value;
+            store.config.baths = document.getElementById('inpBaths').value;
+            store.config.agent = document.getElementById('inpAgent').value;
+            store.config.email = document.getElementById('inpEmail').value;
+            store.config.phone = document.getElementById('inpPhone').value;
+            localStorage.setItem('estate_config_free', JSON.stringify(store.config));
+            navigate('WELCOME');
+        }
+
+        window.handleImage = (e, k) => { 
+            const f = e.target.files[0]; 
+            if(f) { const r = new FileReader(); r.onload=(ev)=>{store.config[k]=ev.target.result; render();}; r.readAsDataURL(f); } 
+        }
+
+        function toggleMenu(s) { 
+            const o=document.getElementById('menuOverlay'), p=document.getElementById('menuPanel'); 
+            if(s){o.classList.remove('invisible','opacity-0');p.classList.remove('translate-x-full')}
+            else{o.classList.add('invisible','opacity-0');p.classList.add('translate-x-full')} 
+        }
+
+        function showVisitorsModal() {
+            const table = document.getElementById('visitorTableBody');
+            const modal = document.getElementById('visitorModal');
+            document.querySelector('#visitorModal thead tr').innerHTML = `<th class="pb-4 pl-4">Name</th><th class="pb-4">Email</th><th class="pb-4">Phone</th><th class="pb-4">Source</th><th class="pb-4">Agent?</th><th class="pb-4 text-right pr-4">Time</th>`;
+            
+            if (!store.visitors || store.visitors.length === 0) {
+                table.innerHTML = '<tr><td colspan="6" class="py-12 text-center text-gray-400">No visitors yet</td></tr>';
+            } else {
+                table.innerHTML = store.visitors.map(v => `
+                    <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                        <td class="py-4 pl-4 font-bold text-navy">${v.name || '-'}</td>
+                        <td class="py-4 text-sm text-navy">${v.email || '-'}</td>
+                        <td class="py-4 text-sm text-navy font-mono">${v.phone || '-'}</td>
+                        <td class="py-4"><span class="bg-gray-100 text-gray-500 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">${v.source || 'Unknown'}</span></td>
+                        <td class="py-4 text-sm font-bold ${v.hasAgent && v.hasAgent.startsWith('Yes') ? 'text-gray-400' : 'text-green-600'}">${v.hasAgent && v.hasAgent.startsWith('Yes') ? 'YES' : 'NO'}</td>
+                        <td class="py-4 pr-4 text-right text-xs text-gray-400 font-mono">${v.timestamp ? v.timestamp.split(',')[1] : ''}</td>
+                    </tr>`).join('');
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function hideVisitorsModal() { document.getElementById('visitorModal').classList.add('hidden'); }
+
+        // --- NEW UPDATED FUNCTION ---
+        function openCopyPasteModal() {
+            // 1. Safety Check
+            if (!store.visitors || store.visitors.length === 0) {
+                alert("No visitors to export yet!");
+                return;
+            }
+
+            // 2. Build TSV Content
+            const headers = "Name\tEmail\tPhone\tSource\tAgent Status\tTime";
+            
+            const rows = store.visitors.map(v => {
+                const clean = (text) => (text || "").replace(/\t/g, " ").replace(/\n/g, " ");
+                return `${clean(v.name)}\t${clean(v.email)}\t${clean(v.phone)}\t${clean(v.source)}\t${clean(v.hasAgent)}\t${clean(v.timestamp)}`;
+            }).join('\n');
+
+            const tsvContent = headers + "\n" + rows;
+
+            // 3. OPEN POPUP
+            const newWindow = window.open("", "_blank", "width=600,height=500");
+            
+            if (newWindow) {
+                newWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Free Export (Copy & Paste)</title>
+                            <style>
+                                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 30px; background: #f9fafb; color: #1f2937; }
+                                h2 { color: #1B2A41; margin-top: 0; }
+                                p { font-size: 14px; color: #6b7280; margin-bottom: 15px; line-height: 1.5; }
+                                textarea { 
+                                    width: 100%; height: 300px; padding: 15px; 
+                                    font-family: monospace; border: 1px solid #d1d5db; 
+                                    border-radius: 8px; background: #fff; font-size: 12px;
+                                    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+                                }
+                                .highlight { background: #dcfce7; padding: 2px 5px; border-radius: 4px; border: 1px solid #86efac; font-weight: bold; color: #166534; }
+                                .upsell { margin-top: 20px; padding: 15px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0; font-size: 14px; text-align: center; color: #166534; }
+                                .upsell a { color: #15803d; font-weight: bold; text-decoration: underline; }
+                                .close-btn { margin-top: 15px; display: block; width: 100%; padding: 10px; background: #e5e7eb; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: #374151; }
+                                .close-btn:hover { background: #d1d5db; }
+                            </style>
+                        </head>
+                        <body>
+                            <h2>📋 Free Export: Copy Data for Excel or Google Sheets</h2>
+                            <p>
+                                <strong>Instructions:</strong><br>
+                                1. Click inside the box below.<br>
+                                2. Press <span class="highlight">Ctrl + A</span> (or Cmd + A) to select all.<br>
+                                3. Press <span class="highlight">Ctrl + C</span> (or Cmd + C) to copy.<br>
+                                4. Open Excel or Google Sheets and <b>Paste</b>.
+                            </p>
+                            <textarea id="dataBox" readonly>${tsvContent}</textarea>
+                            
+                            <div class="upsell">
+                                🚀 <strong>Save time:</strong> 
+                                <a href="https://buy.stripe.com/bJefZhc6o9Aw9QP9IodMI00" target="_blank">Download the official CSV file for just $0.99</a>
+                            </div>
+
+                            <button onclick="window.close()" class="close-btn">Close Window</button>
+
+                            <script>
+                                window.onload = function() {
+                                    const box = document.getElementById('dataBox');
+                                    box.focus();
+                                    box.select();
+                                };
+                            <\/script> 
+                        </body>
+                    </html>
+                `);
+                newWindow.document.close();
+            } else {
+                alert("Please allow Pop-ups for this site to view the export window.");
+            }
+        }
+
+        function updateVisitorCounts() { 
+            const count = store.visitors ? store.visitors.length : 0;
+            const menuCount = document.getElementById('menuVisitorCount');
+            const modalCount = document.getElementById('modalTotalCount');
+            if(menuCount) menuCount.innerText = count;
+            if(modalCount) modalCount.innerText = count;
+        }
+    </script>
+</body>
+</html>

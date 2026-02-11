@@ -1,465 +1,929 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YM1ELQWQLV"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-YM1ELQWQLV');
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Open House Set Up</title>
+    
+    <title>The #1 Digital Open House Sign-In Sheet for Realtors | Powered by AI</title>
+    <meta name="description" content="Capture every lead with the premier digital open house sign-in app. Features AI follow-up, instant QR codes, and offline mode. Try it free today.">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { navy: '#1B2A41', gold: '#C5A059', alabaster: '#F9F9F7' },
-                    fontFamily: { serif: ['Playfair Display', 'serif'], body: ['Lato', 'sans-serif'] },
-                    animation: { 'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite' }
+                    colors: {
+                        navy: '#1B2A41',
+                        gold: '#C5A059',
+                    }
                 }
             }
         }
     </script>
+
     <style>
-        body { background-color: #F9F9F7; font-family: 'Lato', sans-serif; }
-        .glass { background: rgba(27, 42, 65, 0.90); backdrop-filter: blur(10px); }
-        .fade-in { animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .custom-scroll::-webkit-scrollbar { width: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #C5A059; border-radius: 10px; }
-        .ai-sparkle { position: relative; overflow: hidden; }
-        .ai-sparkle::after { content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shimmer 1.5s infinite; }
-        @keyframes shimmer { 100% { left: 100%; } }
+        body { font-family: 'Inter', sans-serif; }
         
-        /* Markdown Styles for Insights */
-        .insights-content strong { color: #C5A059; font-weight: 700; text-transform: uppercase; font-size: 0.8em; letter-spacing: 1px; }
-        .insights-content p { margin-bottom: 0.5rem; color: white; font-size: 0.95rem; }
-        .insights-content ul { list-style: none; padding: 0; }
-        .insights-content li { margin-bottom: 0.25rem; }
+        .feature-pill {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border-radius: 9999px;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* --- UPDATED CAROUSEL ANIMATION --- */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            /* Move exactly 50% because we have 2 sets of images. 
+               Once it hits 50%, it snaps back to 0 seamlessly. */
+            100% { transform: translateX(-50%); } 
+        }
+        
+        .carousel-container {
+            width: 100%;
+            overflow: hidden;
+            background: #f9fafb;
+            padding: 40px 0; /* More vertical breathing room */
+        }
+        
+        .carousel-track {
+            display: flex;
+            /* width: fit-content ensures the track stretches to hold big images */
+            width: fit-content; 
+            animation: scroll 40s linear infinite; /* Slower speed for big images */
+        }
+        
+        .carousel-image {
+            /* BIGGER WIDTH CONFIGURATION */
+            /* Mobile: Image takes 85% of screen width (Huge) */
+            flex: 0 0 85vw; 
+            
+            /* Tablet: Image takes 50% of screen width */
+            @media (min-width: 768px) {
+                flex: 0 0 50vw;
+            }
+
+            /* Desktop: Image takes 35% of screen width (approx 3 on screen) */
+            @media (min-width: 1024px) {
+                flex: 0 0 35vw; 
+            }
+            
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .carousel-image img {
+            width: 100%;
+            /* Keep the height big */
+            height: 95vh; 
+            max-height: 700px;
+            min-height: 400px;
+            
+            /* THE FIX: 'cover' makes the image fill the entire box, no white space */
+            object-fit: cover;
+            
+            /* Add rounded corners for a modern look */
+            border-radius: 1rem; /* rounded-2xl */
+            
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
+            transition: transform 0.3s ease;
+        }
+        
+        .carousel-image img:hover {
+            transform: scale(1.02);
+        }
+
+        /* --- MARQUEE --- */
+        .marquee-container {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+        
+        .marquee-content {
+            display: flex;
+            width: 200%;
+            animation: scroll 40s linear infinite;
+        }
+        
+        .marquee-item {
+            flex-shrink: 0;
+            padding: 0 1.5rem;
+            white-space: nowrap;
+            color: #1B2A41;
+            font-weight: 600;
+        }
     </style>
+<script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.40.0"
+  }
+}
+</script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          navy: '#1B2A41',
+          gold: '#C5A059',
+        }
+      }
+    }
+  }
+</script> 
+    <link rel="stylesheet" href="/index.css">
 </head>
-<body class="text-navy overflow-hidden h-screen w-full relative">
+<body class="bg-gray-50 text-gray-800">
 
-    <div id="app" class="h-full w-full flex flex-col relative"></div>
+    <header class="bg-navy text-white sticky top-0 z-50 shadow-md">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            
+            <a href="index.html" class="flex items-center gap-4 overflow-hidden group">
+                <img src="images/logo.svg" alt="Open House App Logo" class="h-12 w-auto flex-shrink-0 object-contain rounded-sm bg-white/10">
+                <div class="flex flex-col justify-center min-w-0">
+                    <span class="text-xl md:text-2xl font-bold leading-none tracking-tight whitespace-nowrap">
+                        OPEN HOUSE <span class="text-gold">APP</span>
+                    </span>
+                    <span class="hidden md:block text-[10px] text-gray-400 uppercase tracking-wide leading-tight mt-1 truncate">
+                        The #1 Digital Open House Sign-In Sheet
+                    </span>
+                </div>
+            </a>
 
-    <div id="menuOverlay" class="fixed inset-0 z-50 invisible opacity-0 transition-all duration-300">
-        <div class="absolute inset-0 bg-navy/60 backdrop-blur-sm" onclick="toggleMenu(false)"></div>
-        <div id="menuPanel" class="absolute right-0 top-0 h-full w-80 bg-white shadow-2xl transition-transform duration-300 translate-x-full flex flex-col">
-            <div class="p-8 bg-navy text-white flex justify-between items-center">
-                <h2 class="text-2xl font-serif uppercase tracking-tight">Admin Menu</h2>
-                <button onclick="toggleMenu(false)" class="p-2 hover:bg-white/10 rounded-full text-xl">✕</button>
+            <div class="hidden md:flex items-center space-x-2 lg:space-x-6">
+                <a href="index.html" class="text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 px-3 py-2 rounded-md transition-all">Home</a>
+                <a href="#about" class="text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 px-3 py-2 rounded-md transition-all">About</a>
+                <a href="start.html" target="_blank" class="text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 px-3 py-2 rounded-md transition-all">Open House (Free)</a>
+                <a href="#pricing" class="text-sm font-bold bg-gold text-navy px-5 py-2.5 rounded-full hover:bg-white transition-all shadow-lg hover:shadow-gold/20 transform hover:-translate-y-0.5">
+                    AI Powered (Pro)
+                </a>
             </div>
-            <div class="flex-1 py-4 flex flex-col">
-                <button onclick="showVisitorsModal(); toggleMenu(false)" class="flex items-center gap-4 px-8 py-5 hover:bg-alabaster border-b border-gray-100 transition-colors">
-                    <span class="text-xl">👥</span><span class="font-bold uppercase text-xs tracking-widest flex-1 text-left">View Visitors</span>
-                    <span id="menuVisitorCount" class="bg-gold text-white text-[10px] font-black px-2 py-0.5 rounded-full">0</span>
-                </button>
-                <button onclick="downloadCSV(); toggleMenu(false)" class="flex items-center gap-4 px-8 py-5 hover:bg-alabaster border-b border-gray-100 transition-colors">
-                    <span class="text-xl">📥</span><span class="font-bold uppercase text-xs tracking-widest text-left">Download CSV</span>
-                </button>
-                <div class="border-t border-gray-100 my-4 mx-6"></div>
-                <button onclick="navigate('SETUP'); toggleMenu(false)" class="flex items-center gap-4 px-8 py-5 hover:bg-alabaster border-b border-gray-100 transition-colors">
-                    <span class="text-xl">⚙️</span><span class="font-bold uppercase text-xs tracking-widest text-left">Edit Setup</span>
-                </button>
-            </div>
-        </div>
-    </div>
 
-    <div id="visitorModal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-navy/90 backdrop-blur-md" onclick="hideVisitorsModal()"></div>
-        <div class="bg-white w-full max-w-6xl h-[80vh] rounded-xl shadow-2xl relative flex flex-col animate-[fadeIn_0.3s_ease-out]">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                <h2 class="text-3xl font-serif text-navy">Guest List</h2>
-                <button onclick="hideVisitorsModal()" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600">✕</button>
+            <div class="md:hidden flex items-center">
+                <button class="text-white hover:text-gold focus:outline-none p-2">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
             </div>
-            <div class="flex-1 overflow-auto custom-scroll p-6">
-                <table class="w-full text-left border-collapse">
-                    <thead><tr class="text-xs font-bold text-gray-400 uppercase tracking-wider border-b-2 border-gray-100"><th class="pb-4 pl-4">Name</th><th class="pb-4">Contact</th><th class="pb-4">Source</th><th class="pb-4">Agent?</th><th class="pb-4 text-right pr-4">Time</th></tr></thead>
-                    <tbody id="visitorTableBody"></tbody>
-                </table>
+        </nav>
+    </header>
+
+      <main>
+            <section class="relative bg-navy overflow-hidden" style="height: 85vh; min-height: 600px;">
+            
+            <div id="slider-container" class="relative w-full h-full">
+                
+                <div class="slide absolute inset-0 transition-opacity duration-1000 opacity-100 z-10 flex items-center justify-center bg-navy">
+                    <div class="absolute inset-0 bg-[url('images/about-2-b.png')] bg-cover opacity-10 blur-xl scale-110"></div>
+                    
+                    <div class="container mx-auto px-6 relative z-20 grid md:grid-cols-2 gap-12 items-center h-full">
+                        <div class="text-white space-y-6 md:pl-12 order-2 md:order-1">
+                            <span class="text-gold font-bold tracking-widest uppercase text-sm">Step 1: The First Impression</span>
+                            <h2 class="text-4xl md:text-5xl font-extrabold leading-tight">Brand Yourself <br> Like a Pro.</h2>
+                            <p class="text-gray-300 text-lg leading-relaxed max-w-md">
+                                Ditch the paper. Present a sleek, branded digital sign-in that impresses visitors the moment they walk in.
+                            </p>
+                            <a href="#pricing" class="inline-block bg-gold text-navy font-bold py-3 px-8 rounded-full hover:bg-white transition-all transform hover:scale-105">
+                                Try Pro for Free
+                            </a>
+                        </div>
+                        <div class="h-auto w-full flex items-center justify-center order-1 md:order-2">
+                            <img src="images/about-2-b.png" alt="Open House Better Experience" class="w-full h-auto aspect-[1612/907] object-contain drop-shadow-2xl rounded-lg border border-white/10 max-h-[70vh]">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide absolute inset-0 transition-opacity duration-1000 opacity-0 z-0 flex items-center justify-center bg-gray-900">
+                    <div class="absolute inset-0 bg-[url('images/about-1-b.png')] bg-cover opacity-10 blur-xl scale-110"></div>
+                    
+                    <div class="container mx-auto px-6 relative z-20 grid md:grid-cols-2 gap-12 items-center h-full">
+                        <div class="text-white space-y-6 md:pl-12 order-2 md:order-1">
+                            <span class="text-green-400 font-bold tracking-widest uppercase text-sm">Step 2: Total Freedom</span>
+                            <h2 class="text-4xl md:text-5xl font-extrabold leading-tight">Unlimited Visitors. <br> Zero Cost.</h2>
+                            <p class="text-gray-300 text-lg leading-relaxed max-w-md">
+                                Stop paying for expensive software. Get unlimited leads and sign-ins completely free. No Credit Card Required. Setup in 1 minute.
+                            </p>
+                            <a href="start.html" target="_blank" class="inline-block bg-gold text-navy font-bold py-3 px-8 rounded-full hover:bg-white transition-all transform hover:scale-105">
+                                Start Free
+                            </a>
+                        </div>
+                        <div class="h-auto w-full flex items-center justify-center order-1 md:order-2">
+                            <img src="images/about-1-b.png" alt="Open House Free Unlimited Download" class="w-full h-auto aspect-[1612/907] object-contain drop-shadow-2xl rounded-lg border border-white/10 max-h-[70vh]">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide absolute inset-0 transition-opacity duration-1000 opacity-0 z-0 flex items-center justify-center bg-blue-900">
+                    <div class="absolute inset-0 bg-[url('images/full-name.png')] bg-cover opacity-10 blur-xl scale-110"></div>
+                    
+                    <div class="container mx-auto px-6 relative z-20 grid md:grid-cols-2 gap-12 items-center h-full">
+                        <div class="text-white space-y-6 md:pl-12 order-2 md:order-1">
+                            <span class="text-cyan-400 font-bold tracking-widest uppercase text-sm">Step 3: Get to know your visitors</span>
+                            <h2 class="text-4xl md:text-5xl font-extrabold leading-tight">Ask the Right <br> Questions.</h2>
+                            <p class="text-gray-300 text-lg leading-relaxed max-w-md">
+                                Know if they are working with an agent or ready to buy before you even say hello. Customize your questions instantly.
+                            </p>
+                            <a href="start.html" target="_blank" class="inline-block bg-gold text-navy font-bold py-3 px-8 rounded-full hover:bg-white transition-all transform hover:scale-105">
+                                Start Free
+                            </a>
+                        </div>
+                        <div class="h-auto w-full flex items-center justify-center order-1 md:order-2">
+                            <img src="images/full-name.png" alt="Open House Questions" class="w-full h-auto aspect-[1612/907] object-contain drop-shadow-2xl rounded-lg border border-white/10 max-h-[70vh]">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide absolute inset-0 transition-opacity duration-1000 opacity-0 z-0 flex items-center justify-center bg-purple-900">
+                    <div class="absolute inset-0 bg-[url('images/dashboard.png')] bg-cover opacity-10 blur-xl scale-110"></div>
+                    
+                    <div class="container mx-auto px-6 relative z-20 grid md:grid-cols-2 gap-12 items-center h-full">
+                        <div class="text-white space-y-6 md:pl-12 order-2 md:order-1">
+                            <span class="text-purple-400 font-bold tracking-widest uppercase text-sm">Step 4: Live Dashboard</span>
+                            <h2 class="text-4xl md:text-5xl font-extrabold leading-tight">Manage Visitors <br> In Real-Time.</h2>
+                            <p class="text-gray-300 text-lg leading-relaxed max-w-md">
+                                See exactly who is walking through your door. Track every visitor name, agent status, and arrival time live.
+                            </p>
+                            <a href="#ai-features" class="inline-block bg-gold text-navy font-bold py-3 px-8 rounded-full hover:bg-white transition-all transform hover:scale-105">
+                                Try Pro for Free
+                            </a>
+                        </div>
+                        <div class="h-auto w-full flex items-center justify-center order-1 md:order-2">
+                            <img src="images/dashboard.png" alt="Open House Visitors" class="w-full h-auto aspect-[1612/907] object-contain drop-shadow-2xl rounded-lg border border-white/10 max-h-[70vh]">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide absolute inset-0 transition-opacity duration-1000 opacity-0 z-0 flex items-center justify-center bg-indigo-900">
+                    <div class="absolute inset-0 bg-[url('images/carousel-5.png')] bg-cover opacity-10 blur-xl scale-110"></div>
+                    
+                    <div class="container mx-auto px-6 relative z-20 grid md:grid-cols-2 gap-12 items-center h-full">
+                        <div class="text-white space-y-6 md:pl-12 order-2 md:order-1">
+                            <span class="text-pink-400 font-bold tracking-widest uppercase text-sm">Step 5: Speed to Lead</span>
+                            <h2 class="text-4xl md:text-5xl font-extrabold leading-tight">Export Leads <br> Instantly [Coming Soon]</h2>
+                            <p class="text-gray-300 text-lg leading-relaxed max-w-md">
+                                Don't type manually later. Export new leads directly to your phone contacts or CRM with a single click.
+                            </p>
+                            <a href="#ai-features" target="_blank" class="inline-block bg-gold text-navy font-bold py-3 px-8 rounded-full hover:bg-white transition-all transform hover:scale-105">
+                                Try Pro for Free
+                            </a>
+                        </div>
+                        <div class="h-[50vh] md:h-[60vh] w-full flex items-center justify-center order-1 md:order-2">
+                            <img src="images/carousel-5.png" alt="Open House Export to Contacts" class="h-full w-auto max-w-full object-contain drop-shadow-2xl rounded-lg border border-white/10">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide absolute inset-0 transition-opacity duration-1000 opacity-0 z-0 flex items-center justify-center bg-teal-900">
+                    <div class="absolute inset-0 bg-[url('images/ai-insights.png')] bg-cover opacity-10 blur-xl scale-110"></div>
+                    
+                    <div class="container mx-auto px-6 relative z-20 grid md:grid-cols-2 gap-12 items-center h-full">
+                        <div class="text-white space-y-6 md:pl-12 order-2 md:order-1">
+                            <span class="text-teal-400 font-bold tracking-widest uppercase text-sm">Step 6: AI Insights</span>
+                            <h2 class="text-4xl md:text-5xl font-extrabold leading-tight">Know the Neighborhood <br> Like a Local.</h2>
+                            <p class="text-gray-300 text-lg leading-relaxed max-w-md">
+                                Our AI generates instant local insights—schools, transport, and dining distance—so you can answer any buyer question.
+                            </p>
+                            <a href="#ai-features" target="_blank" class="inline-block bg-gold text-navy font-bold py-3 px-8 rounded-full hover:bg-white transition-all transform hover:scale-105">
+                                Try Pro for Free
+                            </a>
+                        </div>
+                        <div class="h-auto w-full flex items-center justify-center order-1 md:order-2">
+                            <img src="images/ai-insights.png" alt="Open House Location Distance in Seconds" class="w-full h-auto aspect-[1612/907] object-contain drop-shadow-2xl rounded-lg border border-white/10 max-h-[70vh]">
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <div class="p-6 border-t border-gray-100 bg-gray-50 rounded-b-xl flex justify-between items-center">
-                <span class="text-sm font-bold text-gray-500">Total: <span id="modalTotalCount" class="text-navy">0</span></span>
-                <button onclick="downloadCSV()" class="bg-navy text-white px-6 py-3 rounded-lg text-sm font-bold uppercase tracking-wider hover:bg-navy/90 shadow-lg">Export CSV</button>
+            <div class="absolute bottom-10 left-0 right-0 z-30 flex justify-center space-x-3">
+                <button class="w-3 h-3 rounded-full bg-white transition-all duration-300" onclick="goToSlide(0)"></button>
+                <button class="w-3 h-3 rounded-full bg-white/30 hover:bg-white transition-all duration-300" onclick="goToSlide(1)"></button>
+                <button class="w-3 h-3 rounded-full bg-white/30 hover:bg-white transition-all duration-300" onclick="goToSlide(2)"></button>
+                <button class="w-3 h-3 rounded-full bg-white/30 hover:bg-white transition-all duration-300" onclick="goToSlide(3)"></button>
+                <button class="w-3 h-3 rounded-full bg-white/30 hover:bg-white transition-all duration-300" onclick="goToSlide(4)"></button>
+                <button class="w-3 h-3 rounded-full bg-white/30 hover:bg-white transition-all duration-300" onclick="goToSlide(5)"></button>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script>
-        // --- 🤖 GEMINI AI CONFIGURATION ---
-        // TODO: REPLACE WITH YOUR KEY
-        const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"; 
-        
-        // --- STATE ---
-        const store = {
-            screen: 'SETUP',
-            config: { address: '', price: '', beds: '', baths: '', agent: '', phone: '', email: '', highlights: '', photo: null, headshot: null, logo: null },
-            visitors: [],
-            formData: {}
-        };
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.absolute.bottom-10 button');
+        const totalSlides = slides.length;
+        let slideInterval;
 
-        window.onload = () => {
-            const savedConfig = localStorage.getItem('estate_config');
-            const savedVisitors = localStorage.getItem('estate_visitors');
-            if (savedConfig) store.config = JSON.parse(savedConfig);
-            if (savedVisitors) store.visitors = JSON.parse(savedVisitors);
-            updateVisitorCounts();
-            render();
-        };
-
-        function navigate(screen) { store.screen = screen; store.formData = {}; render(); }
-
-        function render() {
-            const app = document.getElementById('app');
-            app.innerHTML = '';
-            switch(store.screen) {
-                case 'SETUP': renderSetup(app); break;
-                case 'WELCOME': renderWelcome(app); break;
-                case 'SIGN_IN': renderForm(app); break;
-                case 'SUCCESS': renderSuccess(app); break;
-            }
-        }
-
-        // --- 1. SETUP SCREEN (WITH AI) ---
-        function renderSetup(container) {
-            container.innerHTML = `
-                <div class="max-w-4xl w-full mx-auto p-4 md:p-8 fade-in overflow-y-auto h-full">
-                    <div class="text-center mb-8">
-                        <h1 class="text-4xl md:text-5xl font-serif text-navy mb-2">Open House Set Up</h1>
-                        <p class="text-gold uppercase tracking-widest text-xs font-bold">Powered by Gemini 3</p>
-                    </div>
-
-                    <div class="space-y-6 bg-white p-6 md:p-10 rounded-2xl shadow-xl border border-gray-100">
-                        <div class="flex flex-col md:flex-row gap-6 h-auto md:h-48">
-                            ${renderUploadBox('listingInput', 'photo', '📸 Listing Photo', 'w-full md:w-auto md:flex-[2] aspect-video h-40 md:h-48')}
-                            <div class="flex gap-4 md:contents">
-                                ${renderUploadBox('logoInput', 'logo', '🏢 Logo', 'w-1/2 md:w-auto md:flex-1 aspect-square h-40 md:h-48')}
-                                ${renderUploadBox('headshotInput', 'headshot', '👤 Headshot', 'w-1/2 md:w-auto md:flex-1 aspect-square h-40 md:h-48')}
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="col-span-1 md:col-span-2">
-                                <label class="block text-xs font-bold text-gold uppercase mb-2">Property Address (Full Address needed for AI)</label>
-                                <input type="text" id="inpAddress" value="${store.config.address}" class="w-full p-4 bg-alabaster border-none rounded-lg focus:ring-2 focus:ring-gold outline-none font-serif text-lg" placeholder="e.g. 123 Luxury Lane, Beverly Hills, CA">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-gold uppercase mb-2">Price</label>
-                                <input type="text" id="inpPrice" value="${store.config.price}" class="w-full p-4 bg-alabaster border-none rounded-lg focus:ring-2 focus:ring-gold outline-none" placeholder="$1,250,000">
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div><label class="block text-xs font-bold text-gold uppercase mb-2">Beds</label><input type="text" id="inpBeds" value="${store.config.beds}" class="w-full p-4 bg-alabaster border-none rounded-lg focus:ring-2 focus:ring-gold outline-none"></div>
-                                <div><label class="block text-xs font-bold text-gold uppercase mb-2">Baths</label><input type="text" id="inpBaths" value="${store.config.baths}" class="w-full p-4 bg-alabaster border-none rounded-lg focus:ring-2 focus:ring-gold outline-none"></div>
-                            </div>
-                            
-                            <div class="col-span-1 md:col-span-2 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-100">
-                                <div class="flex justify-between items-center mb-2">
-                                    <label class="block text-xs font-bold text-navy uppercase tracking-wider">Neighborhood Highlights (Dining, Transport, Schools)</label>
-                                    <button onclick="generateAIHighlights()" id="aiBtn" class="text-xs bg-white border border-blue-200 text-blue-600 px-3 py-1 rounded-full font-bold shadow-sm hover:shadow-md transition-all flex items-center gap-1">
-                                        <span>✨</span> Generate Local Insights
-                                    </button>
-                                </div>
-                                <textarea id="inpHighlights" rows="5" class="w-full p-4 bg-white border-none rounded-lg focus:ring-2 focus:ring-gold outline-none text-sm leading-relaxed" placeholder="Enter address above and click Generate to see local amenities...">${store.config.highlights || ''}</textarea>
-                                <p class="text-[10px] text-gray-400 mt-2 text-right">Powered by Google Gemini 3</p>
-                            </div>
-
-                            <div class="col-span-1 md:col-span-2 border-t border-gray-100 my-2"></div>
-                            
-                            <div class="col-span-1"><label class="block text-xs font-bold text-gold uppercase mb-2">Agent Name</label><input type="text" id="inpAgent" value="${store.config.agent}" class="w-full p-4 bg-alabaster border-none rounded-lg focus:ring-2 focus:ring-gold outline-none"></div>
-                            <div class="col-span-1"><label class="block text-xs font-bold text-gold uppercase mb-2">Agent Email</label><input type="text" id="inpEmail" value="${store.config.email}" class="w-full p-4 bg-alabaster border-none rounded-lg focus:ring-2 focus:ring-gold outline-none"></div>
-                            <div class="col-span-1 md:col-span-2"><label class="block text-xs font-bold text-gold uppercase mb-2">Agent Phone</label><input type="text" id="inpPhone" value="${store.config.phone}" class="w-full p-4 bg-alabaster border-none rounded-lg focus:ring-2 focus:ring-gold outline-none"></div>
-                        </div>
-
-                        <button onclick="saveAndLaunch()" class="w-full py-5 bg-navy text-white rounded-xl font-bold uppercase tracking-widest hover:bg-gold transition-colors shadow-lg mt-8">START OPEN HOUSE</button>
-                        <div class="text-center mt-4"><button onclick="showVisitorsModal()" class="text-xs font-bold text-gray-400 uppercase hover:text-navy underline">View Current Visitors</button></div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // --- 🤖 AI FUNCTION ---
-        async function generateAIHighlights() {
-            const btn = document.getElementById('aiBtn');
-            const field = document.getElementById('inpHighlights');
-            const addr = document.getElementById('inpAddress').value;
+        function showSlide(index) {
+            // Reset all slides
+            slides.forEach((slide) => {
+                slide.classList.remove('opacity-100', 'z-10');
+                slide.classList.add('opacity-0', 'z-0');
+            });
             
-            // 1. CHECK API KEY
-            if(!GEMINI_API_KEY || GEMINI_API_KEY.includes("YOUR_GEMINI_API_KEY")) {
-                alert("Please add your real Gemini API Key in the code first.");
-                return;
-            }
+            // Reset all dots
+            dots.forEach((dot) => {
+                dot.classList.remove('bg-white', 'w-8'); // Remove active state
+                dot.classList.add('bg-white/30', 'w-3'); // Add inactive state
+            });
 
-            if(!addr) { alert("Please enter an address first."); return; }
-
-            // 2. UI LOADING STATE
-            btn.innerHTML = '<span>⚡</span> Scouting...';
-            btn.classList.add('ai-sparkle');
+            // Activate current slide
+            slides[index].classList.remove('opacity-0', 'z-0');
+            slides[index].classList.add('opacity-100', 'z-10');
             
-            // 3. PROMPT - FORCE MARKDOWN LIST
-            const prompt = `You are a luxury real estate concierge. For the address: "${addr}", identify the best nearby amenities.
+            // Activate current dot
+            dots[index].classList.remove('bg-white/30', 'w-3');
+            dots[index].classList.add('bg-white', 'w-8'); // Make it wider to show active
             
-            Format the output strictly as a Markdown Bulleted List.
-            Use bold for the category names.
-            
-            Example format:
-            * 🍽️ **Dining:** Name of Restaurant 1, Name of Restaurant 2
-            * 🛒 **Shopping:** Name of Grocery Store
-            * 🚆 **Transport:** Name of Station (Distance)
-            * 🎓 **Schools:** Name of School (Rating)
-
-            Do not write any intro or outro text. Just the 4 bullet points.`;
-
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        contents: [{ parts: [{ text: prompt }] }],
-                        generationConfig: { thinkingConfig: { thinkingLevel: "low" } }
-                    })
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    console.error("API Error:", data);
-                    alert(`API Error: ${data.error?.message || "Check console"}`);
-                    throw new Error(data.error?.message);
-                }
-
-                const aiText = data.candidates[0].content.parts[0].text;
-                
-                // 5. TYPING EFFECT
-                field.value = "";
-                let i = 0;
-                const typeWriter = setInterval(() => {
-                    if (i < aiText.length) { field.value += aiText.charAt(i); i++; } 
-                    else { clearInterval(typeWriter); }
-                }, 5);
-                
-                store.config.highlights = aiText;
-
-            } catch (error) {
-                console.error("System Error:", error);
-            } finally {
-                btn.innerHTML = '<span>✨</span> Generate Local Insights';
-                btn.classList.remove('ai-sparkle');
-            }
-        }
-        function renderUploadBox(id, key, label, classes) {
-            const hasImg = store.config[key];
-            return `<div class="relative group cursor-pointer bg-alabaster rounded-xl border-2 border-dashed border-gray-200 hover:border-gold flex items-center justify-center overflow-hidden transition-all ${classes}" onclick="document.getElementById('${id}').click()">
-                ${hasImg ? `<img src="${hasImg}" class="w-full h-full object-cover">` : `<div class="text-center"><div class="text-2xl mb-2 grayscale opacity-50">${label.split(' ')[0]}</div><div class="text-[10px] font-bold text-navy uppercase tracking-widest">${label.split(' ').slice(1).join(' ')}</div></div>`}
-                <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-white text-xs font-bold uppercase">Change</div>
-                <input type="file" id="${id}" class="hidden" accept="image/*" onchange="handleImage(this, '${key}')">
-            </div>`;
-        }
-        // --- 2. WELCOME SCREEN ---
-        function renderWelcome(container) {
-            const bgStyle = store.config.photo ? `background-image: url('${store.config.photo}');` : 'background-color: #1B2A41;';
-            
-            // 1. LOGO UPDATE: Fixed width to match QR code (approx 150px)
-            const logoHtml = store.config.logo ? `<img src="${store.config.logo}" class="w-[150px] object-contain">` : '<div></div>';
-            
-            const highlightsHtml = store.config.highlights ? marked.parse(store.config.highlights.replace(/\n/g, '\n\n')) : '';
-
-            container.innerHTML = `
-                <div class="absolute inset-0 bg-cover bg-center transition-all duration-1000" style="${bgStyle}"><div class="absolute inset-0 bg-navy/85"></div></div>
-                
-                <div class="relative z-10 w-full p-8 flex justify-between items-start fade-in">
-                    ${logoHtml} <button onclick="toggleMenu(true)" class="bg-white/10 backdrop-blur-md border border-white/20 text-white w-12 h-12 rounded-full hover:bg-white hover:text-navy transition-all flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
-                </div>
-                
-                <div class="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 fade-in w-full max-w-5xl mx-auto">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center w-full">
-                        <div class="text-center md:text-left">
-                            <p class="text-gold font-bold uppercase tracking-[0.3em] text-sm mb-4">Welcome to</p>
-                            <h1 class="text-5xl md:text-6xl font-serif text-white mb-6 leading-tight">${store.config.address || 'Open House'}</h1>
-                            <div class="flex flex-wrap justify-center md:justify-start gap-4 text-gray-300 font-light text-lg mb-8">
-                                <span class="whitespace-nowrap">${store.config.price}</span>
-                                ${store.config.beds ? `<span class="hidden sm:inline">•</span><span class="whitespace-nowrap">${store.config.beds} Beds</span>` : ''}
-                                ${store.config.baths ? `<span class="hidden sm:inline">•</span><span class="whitespace-nowrap">${store.config.baths} Baths</span>` : ''}
-                            </div>
-                            <button onclick="navigate('SIGN_IN')" class="group relative px-10 py-5 bg-gold text-white font-bold uppercase tracking-widest rounded-full overflow-hidden shadow-2xl shadow-gold/30 transition-transform hover:scale-105 active:scale-95">
-                                <span class="relative z-10">Start Tour</span><div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                            </button>
-                        </div>
-
-                        ${highlightsHtml ? `
-                        <div class="glass p-8 rounded-2xl border border-white/10 text-left shadow-2xl transform transition-all hover:-translate-y-1">
-                            <div class="text-gold text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
-                                <span class="text-lg">📍</span> Location Highlights
-                            </div>
-                            <div class="insights-content text-white leading-relaxed">
-                                ${highlightsHtml}
-                            </div>
-                        </div>` : ''}
-                    </div>
-                </div>
-
-                <div class="relative z-20 w-full p-8 flex flex-col md:flex-row items-end justify-between gap-6 fade-in pb-12">
-                    
-                    <div class="hidden md:flex flex-col items-center gap-2">
-                        <div class="bg-white p-3 rounded-xl shadow-2xl h-[154px] w-[154px] flex items-center justify-center">
-                            <div id="qrcode"></div>
-                        </div>
-                        <div class="text-[10px] text-white/80 font-bold uppercase tracking-widest bg-navy/50 px-3 py-1 rounded backdrop-blur-sm shadow-sm">Map Property</div>
-                    </div>
-
-                    <div class="glass px-8 rounded-2xl flex items-center gap-6 border border-white/10 shadow-2xl max-w-md w-full md:w-auto h-[154px]">
-                        ${store.config.headshot ? `<img src="${store.config.headshot}" class="w-24 h-24 rounded-full object-cover border-2 border-gold shadow-lg">` : ''} <div class="text-left flex flex-col justify-center h-full">
-                            <div class="text-white font-serif text-2xl leading-tight mb-2">${store.config.agent}</div>
-                            
-                            <div class="text-gold text-[11px] font-bold uppercase tracking-widest flex flex-col gap-1">
-                                <span>${store.config.phone}</span>
-                                <span class="opacity-90 lowercase" style="text-transform: none;">${store.config.email}</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="hidden md:block w-[154px]"></div> 
-                </div>
-            `;
-            
-            // QR Code Generation (Size 128 + padding = ~154px total)
-            setTimeout(() => { 
-                if(store.config.address) {
-                    const qrContainer = document.getElementById("qrcode");
-                    qrContainer.innerHTML = ""; 
-                    new QRCode(qrContainer, { 
-                        text: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(store.config.address), 
-                        width: 128, 
-                        height: 128,
-                        correctLevel : QRCode.CorrectLevel.H
-                    }); 
-                }
-            }, 100);
+            currentSlide = index;
         }
 
-        // --- 3. FORM ---
-        const questions = [
-            { id: 'name', label: "Full Name?", type: 'text', placeholder: 'First & Last Name' },
-            { id: 'email', label: "Email Address?", type: 'email', placeholder: 'name@example.com' },
-            { id: 'phone', label: "Phone Number?", type: 'tel', placeholder: '(555) 000-0000' },
-            { id: 'source', label: "How did you find us?", type: 'select', options: ['Zillow / Trulia', 'Sign Board', 'Social Media', 'Referral', 'Agent'] },
-            { id: 'hasAgent', label: "Are you represented?", type: 'select', options: ['Yes, I have an agent', 'No, I am unrepresented', 'Just looking'] }
-        ];
-        let currentStep = 0;
-
-        function renderForm(container) {
-            const q = questions[currentStep];
-            const progress = ((currentStep + 1) / questions.length) * 100;
-            let inputHTML = q.type === 'select' 
-                ? `<div class="grid gap-3 w-full max-w-md">${q.options.map(opt => `<button onclick="handleAnswer('${q.id}', '${opt}')" class="w-full text-left p-5 rounded-xl border border-gray-200 hover:border-gold hover:bg-gold/5 transition-all font-bold text-navy flex justify-between group"><span class="group-hover:translate-x-1 transition-transform">${opt}</span><span class="text-gold opacity-0 group-hover:opacity-100">→</span></button>`).join('')}</div>` 
-                : `<input type="${q.type}" id="wizardInput" class="w-full max-w-md bg-transparent border-b-2 border-gray-200 focus:border-navy text-3xl py-4 outline-none font-serif text-center mb-8 placeholder-gray-300" placeholder="${q.placeholder}" onkeydown="if(event.key==='Enter') handleAnswer('${q.id}', this.value)" autofocus><button onclick="handleAnswer('${q.id}', document.getElementById('wizardInput').value)" class="px-10 py-4 bg-navy text-white rounded-xl font-bold uppercase tracking-widest hover:bg-gold transition-colors">Continue</button>`;
-
-            container.innerHTML = `<div class="h-full w-full flex flex-col bg-white fade-in"><div class="h-1 bg-gray-100 w-full"><div class="h-full bg-gold transition-all duration-500" style="width: ${progress}%"></div></div><div class="flex-1 flex flex-col items-center justify-center p-8 text-center relative"><button onclick="navigate('WELCOME')" class="absolute top-8 left-8 text-xs font-bold text-gray-400 hover:text-navy uppercase tracking-widest">← Cancel</button><div class="mb-4 text-gold font-bold uppercase tracking-widest text-xs">Step ${currentStep + 1} of ${questions.length}</div><h2 class="text-4xl md:text-5xl font-serif text-navy mb-3">${q.label}</h2>${inputHTML}</div></div>`;
-            if(q.type !== 'select') setTimeout(() => document.getElementById('wizardInput')?.focus(), 50);
+        function nextSlide() {
+            let next = (currentSlide + 1) % totalSlides;
+            showSlide(next);
         }
 
-        function handleAnswer(key, val) { if(!val) return; store.formData[key] = val; if(currentStep < questions.length-1) { currentStep++; render(); } else { saveVisitor(); } }
-        function saveVisitor() { const v = { ...store.formData, timestamp: new Date().toLocaleString() }; store.visitors.push(v); localStorage.setItem('estate_visitors', JSON.stringify(store.visitors)); updateVisitorCounts(); currentStep=0; navigate('SUCCESS'); }
-
-        // --- 4. SUCCESS ---
-        function renderSuccess(container) {
-            container.innerHTML = `<div class="h-full w-full flex flex-col items-center justify-center bg-navy text-white text-center p-8 fade-in"><div class="w-24 h-24 rounded-full border-2 border-gold flex items-center justify-center text-4xl mb-8 text-gold">✦</div><h1 class="text-5xl md:text-6xl font-serif mb-6">You're All Set</h1><p class="text-white/60 text-lg mb-12 max-w-md">Thank you for registering. Please feel free to tour the property.</p><button onclick="navigate('WELCOME')" class="px-10 py-4 bg-gold text-white rounded-xl font-bold uppercase tracking-widest hover:bg-white hover:text-navy transition-colors">Next Guest</button></div>`;
+        function goToSlide(index) {
+            clearInterval(slideInterval); // Stop auto-play if user clicks
+            showSlide(index);
+            startAutoPlay(); // Restart auto-play
         }
 
-       // --- UTILS ---
-        function saveAndLaunch() {
-            store.config.address = document.getElementById('inpAddress').value;
-            store.config.price = document.getElementById('inpPrice').value;
-            store.config.beds = document.getElementById('inpBeds').value;
-            store.config.baths = document.getElementById('inpBaths').value;
-            store.config.agent = document.getElementById('inpAgent').value;
-            store.config.email = document.getElementById('inpEmail').value;
-            store.config.phone = document.getElementById('inpPhone').value;
-            store.config.highlights = document.getElementById('inpHighlights').value; 
-            localStorage.setItem('estate_config', JSON.stringify(store.config));
-            navigate('WELCOME');
+        function startAutoPlay() {
+            slideInterval = setInterval(nextSlide, 5000); // Change every 5 seconds
         }
 
-        function handleImage(inp, k) { 
-            const f = inp.files[0]; 
-            if(f) { 
-                const r = new FileReader(); 
-                r.onload=(e)=>{store.config[k]=e.target.result; render();}; 
-                r.readAsDataURL(f); 
-            } 
-        }
-
-        function toggleMenu(s) { 
-            const o=document.getElementById('menuOverlay'), p=document.getElementById('menuPanel'); 
-            if(s){o.classList.remove('invisible','opacity-0');p.classList.remove('translate-x-full')}
-            else{o.classList.add('invisible','opacity-0');p.classList.add('translate-x-full')} 
-        }
-
-        function showVisitorsModal() {
-            const table = document.getElementById('visitorTableBody');
-            const modal = document.getElementById('visitorModal');
-            
-            // 1. FIX HEADERS: Force the table headers to match our 6 data columns
-            // This prevents the "shifting" issue where Phone appears in the wrong spot
-            const headerRow = document.querySelector('#visitorModal thead tr');
-            if(headerRow) {
-                headerRow.innerHTML = `
-                    <th class="pb-4 pl-4">Name</th>
-                    <th class="pb-4">Email</th>
-                    <th class="pb-4">Phone</th>
-                    <th class="pb-4">Source</th>
-                    <th class="pb-4">Agent?</th>
-                    <th class="pb-4 text-right pr-4">Time</th>
-                `;
-            }
-
-            // 2. RENDER ROWS: Handle missing data safely with "|| '-'"
-            if (!store.visitors || store.visitors.length === 0) {
-                table.innerHTML = '<tr><td colspan="6" class="py-12 text-center text-gray-400">No visitors yet</td></tr>';
-            } else {
-                table.innerHTML = store.visitors.map(v => `
-                    <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                        <td class="py-4 pl-4 font-bold text-navy">${v.name || '-'}</td>
-                        <td class="py-4 text-sm text-navy">${v.email || '-'}</td>
-                        <td class="py-4 text-sm text-navy font-mono">${v.phone || '-'}</td>
-                        <td class="py-4">
-                            <span class="bg-gray-100 text-gray-500 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
-                                ${v.source || 'Unknown'}
-                            </span>
-                        </td>
-                        <td class="py-4 text-sm font-bold ${v.hasAgent && v.hasAgent.startsWith('Yes') ? 'text-gray-400' : 'text-green-600'}">
-                            ${v.hasAgent && v.hasAgent.startsWith('Yes') ? 'YES' : 'NO'}
-                        </td>
-                        <td class="py-4 pr-4 text-right text-xs text-gray-400 font-mono">
-                            ${v.timestamp ? v.timestamp.split(',')[1] : ''}
-                        </td>
-                    </tr>
-                `).join('');
-            }
-            
-            modal.classList.remove('hidden');
-        }
-
-        function hideVisitorsModal() { 
-            document.getElementById('visitorModal').classList.add('hidden'); 
-        }
-
-        function downloadCSV() {
-            if(!store.visitors.length) return alert("No visitors.");
-            let csv = "Name,Email,Phone,Source,Agent Status,Time\n" + store.visitors.map(v => `"${v.name}","${v.email}","${v.phone}","${v.source}","${v.hasAgent}","${v.timestamp}"`).join('\n');
-            const a = document.createElement('a'); a.href = window.URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = `OpenHouse_${new Date().toISOString().slice(0,10)}.csv`; a.click();
-        }
-        function updateVisitorCounts() { document.getElementById('menuVisitorCount').innerText = store.visitors.length; document.getElementById('modalTotalCount').innerText = store.visitors.length; }
+        // Initialize
+        showSlide(0);
+        startAutoPlay();
     </script>
+        
+        <!-- Main Section -->					 
+        <section class="relative pt-32 pb-20 md:pt-48 md:pb-40 text-white overflow-hidden">
+            
+            <div class="absolute inset-0 z-0">
+                <img src="images/open-house-background.png" alt="Luxury Home" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-b from-navy/80 via-navy/60 to-navy/90"></div>
+            </div>
+            
+            <div class="container mx-auto px-6 text-center relative z-10">
+                
+                <div class="max-w-4xl mx-auto p-8 md:p-12 rounded-3xl bg-navy/50 backdrop-blur-md border-2 border-white/20 shadow-2xl shadow-black/50">
+                    
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-tight mb-6 drop-shadow-lg">
+                        Better Sign-Ins. <br class="hidden md:block" />
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold to-yellow-200">More Leads.</span>
+                    </h1>
+                    
+                    <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-gray-100 font-light leading-relaxed mb-10 shadow-black drop-shadow-md">
+                        The paper clipboard is dead. Upgrade to the digital sign-in experience designed for the nation's top real estate agents.
+                    </p>
+                    
+                    <div class="flex flex-col md:flex-row justify-center items-center gap-4">
+                        <a href="start.html" target="_blank" class="group relative w-full md:w-auto bg-gold text-navy font-bold py-4 px-8 rounded-xl shadow-[0_0_40px_-10px_rgba(197,160,89,0.5)] hover:shadow-[0_0_60px_-10px_rgba(197,160,89,0.7)] hover:bg-white hover:text-navy transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center border-2 border-gold">
+                            <span class="text-lg">Start Free Open House</span>
+                            <span id="user-city-badge" class="ml-2 bg-navy/10 text-navy px-2 py-0.5 rounded text-xs uppercase tracking-wide hidden">Local</span>
+                            <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </a>
+
+                        <a href="#ai-features" class="w-full md:w-auto bg-transparent border-2 border-white/30 text-white font-semibold py-4 px-8 rounded-xl hover:bg-white/10 hover:border-white transition-all duration-300 flex items-center justify-center shadow-lg">
+                            <span>See Pro Features</span>
+                        </a>
+                    </div>
+
+                    <div class="mt-8 flex flex-wrap justify-center items-center gap-4 md:gap-6 text-sm text-gray-300 font-medium">
+                        <span class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg> No credit card required</span>
+                        <span class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg> Setup in 1 minutes</span>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 bg-white overflow-hidden">
+            <div class="container mx-auto px-6">
+                
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-navy">
+                        Premier Digital Sign-In Tools for <span class="text-gold user-city">Major Markets</span>
+                    </h2>
+                    <p class="mt-4 text-lg text-gray-500 font-medium">
+                        The #1 choice for real estate agents in <span class="user-city font-bold text-navy">the US</span> and across North America.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 items-center mb-32">
+                    
+                    <div class="md:order-2">
+                        <div class="bg-gold/10 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                        </div>
+                        <h3 class="text-3xl font-bold text-navy mb-6">Digital Open House Sign-In for <span class="user-city">Luxury</span> Real Estate</h3>
+                        <div class="text-gray-600 leading-relaxed text-lg space-y-3 text-justify">
+                            <p>• <strong>Trusted by top agents in <span class="user-city font-bold text-navy">your area</span></strong> — From Manhattan penthouses to Beverly Hills estates, leading real estate professionals choose Open House APP for their open house visitor sign-in needs.</p>
+                            <p>• <strong>Built for competitive <span class="user-city">markets</span></strong> — Designed specifically for high-volume open houses in premium neighborhoods where first impressions matter.</p>
+                            <p>• <strong>Professional & elegant</strong> — Handle dozens of visitors on busy Sundays while maintaining the sophisticated experience luxury listings demand.</p>
+                        </div>
+                    </div>
+
+                    <div class="relative h-[400px] w-full">
+                        <div class="absolute top-0 left-0 w-3/5 h-[350px] z-10 rounded-2xl shadow-xl overflow-hidden border-4 border-white transition-all duration-500 hover:z-30 hover:scale-105 cursor-pointer">
+                            <img src="images/about-1.png" alt="Luxury Real Estate Interior Open House" class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute bottom-0 right-0 w-3/4 z-20 rounded-xl shadow-2xl bg-white overflow-hidden border border-gray-200 transition-all duration-500 hover:z-30 hover:scale-105 hover:-translate-y-2 cursor-pointer">
+                            <div class="bg-gray-100 px-4 py-2 border-b border-gray-200 flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                                <div class="ml-4 flex-1 bg-white h-6 rounded-md text-[10px] text-gray-400 flex items-center px-2 truncate">openhousesheet.com/start</div>
+                            </div>
+                            <div class="aspect-video bg-gray-50">
+                                <img src="images/about-1-b.png" alt="OpenHouseAI Dashboard Interface for Real Estate Agents" class="w-full h-full object-cover object-top">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="ai-features" class="grid md:grid-cols-2 gap-12 items-center">
+                    
+                    <div>
+                        <div class="bg-gold/10 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <h3 class="text-3xl font-bold text-navy mb-6">AI-Powered Local Insights for <span class="user-city">Your City</span></h3>
+                        <div class="text-gray-600 leading-relaxed text-lg space-y-3 text-justify">
+                            <p>• <strong>Instant neighborhood intelligence</strong> — Our AI scouts <span class="user-city font-bold text-navy">local</span> areas in seconds, providing real-time data on nearby amenities, schools, and transportation.</p>
+                            <p>• <strong>Zero memorization required</strong> — Simply enter any listing address in <span class="user-city">town</span>, and get a curated list of top-rated restaurants, highly-rated schools, transit options, and community highlights.</p>
+                            <p>• <strong>Answer buyer questions instantly</strong> — Impress potential buyers with detailed local knowledge without spending hours researching every neighborhood.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative h-[400px] w-full">
+                        <div class="absolute top-0 right-0 w-3/5 h-[350px] z-10 rounded-2xl shadow-xl overflow-hidden border-4 border-white transition-all duration-500 hover:z-30 hover:scale-105 cursor-pointer">
+                            <img src="images/about-2.png" alt="Real Estate Agent Using OpenHouseAI at Open House" class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute bottom-0 left-0 w-3/4 z-20 rounded-xl shadow-2xl bg-white overflow-hidden border border-gray-200 transition-all duration-500 hover:z-30 hover:scale-105 hover:-translate-y-2 cursor-pointer">
+                            <div class="bg-gray-100 px-4 py-2 border-b border-gray-200 flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                                <div class="ml-4 flex-1 bg-white h-6 rounded-md text-[10px] text-gray-400 flex items-center px-2 truncate">openhousesheet.com/pro</div>
+                            </div>
+                            <div class="aspect-video bg-gray-50">
+                                <img src="images/about-2-b.png" alt="AI Neighborhood Map Interface for Real Estate" class="w-full h-full object-cover object-top">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // Enhanced location detection with validation across multiple sources
+                async function detectLocation() {
+                    console.log('🌍 Starting enhanced geolocation detection with validation...');
+                    
+                    const locationResults = [];
+                    
+                    // Try Method 1: ipapi.co (High accuracy, rate limited)
+                    try {
+                        console.log('Trying ipapi.co...');
+                        const response = await fetch('https://ipapi.co/json/');
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                        
+                        const data = await response.json();
+                        if (data.error) throw new Error(data.reason || 'API Error');
+                        
+                        if (data.city && data.region_code) {
+                            console.log(`✅ ipapi.co: ${data.city}, ${data.region_code}, ${data.country_code}`);
+                            locationResults.push({
+                                city: data.city,
+                                region: data.region_code,
+                                country: data.country_code,
+                                source: 'ipapi.co'
+                            });
+                        }
+                    } catch (error) {
+                        console.log('❌ ipapi.co failed:', error.message);
+                    }
+                    
+                    // Try Method 2: ipapi.com (No rate limits)
+                    try {
+                        console.log('Trying ipapi.com...');
+                        const response = await fetch('https://ipapi.com/ip_api.php?ip=');
+                        const data = await response.json();
+                        
+                        if (data.city && data.region_code) {
+                            console.log(`✅ ipapi.com: ${data.city}, ${data.region_code}, ${data.country_code}`);
+                            locationResults.push({
+                                city: data.city,
+                                region: data.region_code,
+                                country: data.country_code,
+                                source: 'ipapi.com'
+                            });
+                        }
+                    } catch (error) {
+                        console.log('❌ ipapi.com failed:', error.message);
+                    }
+                    
+                    // Try Method 3: ip-api.com (Free, reliable)
+                    try {
+                        console.log('Trying ip-api.com...');
+                        const response = await fetch('http://ip-api.com/json/?fields=status,country,countryCode,region,regionName,city,zip');
+                        const data = await response.json();
+                        
+                        if (data.status === 'success' && data.city) {
+                            console.log(`✅ ip-api.com: ${data.city}, ${data.region}, ${data.countryCode}`);
+                            locationResults.push({
+                                city: data.city,
+                                region: data.region,
+                                country: data.countryCode,
+                                source: 'ip-api.com'
+                            });
+                        }
+                    } catch (error) {
+                        console.log('❌ ip-api.com failed:', error.message);
+                    }
+                    
+                    // Try Method 4: ipify + ipapi combined approach
+                    try {
+                        console.log('Trying ipify + ipapi combo...');
+                        const ipResponse = await fetch('https://api.ipify.org?format=json');
+                        const ipData = await ipResponse.json();
+                        
+                        if (ipData.ip) {
+                            const geoResponse = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
+                            const geoData = await geoResponse.json();
+                            
+                            if (geoData.city && geoData.region_code) {
+                                console.log(`✅ ipify+ipapi: ${geoData.city}, ${geoData.region_code}, ${geoData.country_code}`);
+                                locationResults.push({
+                                    city: geoData.city,
+                                    region: geoData.region_code,
+                                    country: geoData.country_code,
+                                    source: 'ipify+ipapi'
+                                });
+                            }
+                        }
+                    } catch (error) {
+                        console.log('❌ ipify combo failed:', error.message);
+                    }
+                    
+                    // Try Method 5: geolocation-db.com
+                    try {
+                        console.log('Trying geolocation-db.com...');
+                        const response = await fetch('https://geolocation-db.com/json/');
+                        const data = await response.json();
+                        
+                        if (data.city && data.state) {
+                            console.log(`✅ geolocation-db.com: ${data.city}, ${data.state}, ${data.country_code}`);
+                            locationResults.push({
+                                city: data.city,
+                                region: data.state,
+                                country: data.country_code,
+                                source: 'geolocation-db.com'
+                            });
+                        }
+                    } catch (error) {
+                        console.log('❌ geolocation-db.com failed:', error.message);
+                    }
+                    
+                    // Try Method 6: ipwhois.app (Good for international)
+                    try {
+                        console.log('Trying ipwhois.app...');
+                        const response = await fetch('https://ipwhois.app/json/');
+                        const data = await response.json();
+                        
+                        if (data.success && data.city && data.region) {
+                            console.log(`✅ ipwhois.app: ${data.city}, ${data.region}, ${data.country_code}`);
+                            locationResults.push({
+                                city: data.city,
+                                region: data.region,
+                                country: data.country_code,
+                                source: 'ipwhois.app'
+                            });
+                        }
+                    } catch (error) {
+                        console.log('❌ ipwhois.app failed:', error.message);
+                    }
+                    
+                    // Try Method 7: ipinfo.io
+                    try {
+                        console.log('Trying ipinfo.io...');
+                        const response = await fetch('https://ipinfo.io/json');
+                        const data = await response.json();
+                        
+                        if (data.city && data.region) {
+                            console.log(`✅ ipinfo.io: ${data.city}, ${data.region}, ${data.country}`);
+                            locationResults.push({
+                                city: data.city,
+                                region: data.region,
+                                country: data.country,
+                                source: 'ipinfo.io'
+                            });
+                        }
+                    } catch (error) {
+                        console.log('❌ ipinfo.io failed:', error.message);
+                    }
+                    
+                    // Validate and determine best location
+                    if (locationResults.length > 0) {
+                        validateAndUpdateLocation(locationResults);
+                    } else {
+                        console.log('⚠️ All geolocation methods failed. Using defaults.');
+                    }
+                }
+                
+                function validateAndUpdateLocation(results) {
+                    console.log('📊 Validating results from', results.length, 'sources:');
+                    results.forEach(r => console.log(`  - ${r.source}: ${r.city}, ${r.region}`));
+                    
+                    // Count city occurrences
+                    const cityCounts = {};
+                    const regionCounts = {};
+                    let mostCommonCountry = null;
+                    
+                    results.forEach(result => {
+                        // Normalize city names (trim, lowercase for comparison)
+                        const normalizedCity = result.city.trim().toLowerCase();
+                        cityCounts[normalizedCity] = (cityCounts[normalizedCity] || 0) + 1;
+                        
+                        // Count regions
+                        regionCounts[result.region] = (regionCounts[result.region] || 0) + 1;
+                        
+                        // Track country
+                        if (!mostCommonCountry) mostCommonCountry = result.country;
+                    });
+                    
+                    console.log('🔍 City distribution:', cityCounts);
+                    console.log('🔍 Region distribution:', regionCounts);
+                    
+                    // Find most common city and region
+                    let maxCityCount = 0;
+                    let mostCommonCity = null;
+                    let maxRegionCount = 0;
+                    let mostCommonRegion = null;
+                    
+                    for (const [city, count] of Object.entries(cityCounts)) {
+                        if (count > maxCityCount) {
+                            maxCityCount = count;
+                            mostCommonCity = city;
+                        }
+                    }
+                    
+                    for (const [region, count] of Object.entries(regionCounts)) {
+                        if (count > maxRegionCount) {
+                            maxRegionCount = count;
+                            mostCommonRegion = region;
+                        }
+                    }
+                    
+                    // Determine consistency threshold (at least 50% agreement)
+                    const consistencyThreshold = Math.ceil(results.length / 2);
+                    
+                    let finalCity, finalRegion, finalCountry;
+                    
+                    // Find the original casing for the most common city
+                    const originalCity = results.find(r => r.city.toLowerCase() === mostCommonCity)?.city;
+                    
+                    // Decision logic: Use city if consistent, otherwise use state/region
+                    if (maxCityCount >= consistencyThreshold && results.length >= 2) {
+                        // Cities are consistent across sources
+                        console.log(`✅ CONSISTENT: City "${originalCity}" appears in ${maxCityCount}/${results.length} sources`);
+                        finalCity = originalCity;
+                        finalRegion = mostCommonRegion;
+                        finalCountry = mostCommonCountry;
+                    } else {
+                        // Cities are inconsistent, use state/region instead
+                        console.log(`⚠️ INCONSISTENT: Cities vary across sources (max ${maxCityCount}/${results.length}). Using state: ${mostCommonRegion}`);
+                        
+                        // Get the full state name if available
+                        const regionResult = results.find(r => r.region === mostCommonRegion);
+                        finalCity = mostCommonRegion; // Use region as display
+                        finalRegion = mostCommonRegion;
+                        finalCountry = regionResult?.country || mostCommonCountry;
+                    }
+                    
+                    console.log(`📍 FINAL DECISION: ${finalCity}, ${finalRegion}, ${finalCountry}`);
+                    
+                    updateLocationElements(finalCity, finalRegion, finalCountry);
+                }
+                
+                function updateLocationElements(city, region, countryCode) {
+                    console.log(`📍 Updating UI with: ${city}, ${region}, ${countryCode}`);
+                    
+                    // Update all location text elements
+                    document.querySelectorAll('.user-city').forEach(el => {
+                        el.style.fontWeight = "bold";
+                        el.innerText = city;
+                    });
+
+                    // Update the main CTA button
+                    const btnText = document.querySelector('a[href="start.html"] span');
+                    if (btnText) {
+                        btnText.innerHTML = `Start Free in ${city}`;
+                    }
+
+                    // Update and reveal the location badge
+                    const badge = document.getElementById('user-city-badge');
+                    if (badge && region) {
+                        badge.classList.remove('hidden');
+                        // Use region code for US states, otherwise show country
+                        badge.innerText = (countryCode === 'US' || countryCode === 'CA') ? region : countryCode || "Local";
+                    }
+                    
+                    // Add subtle animation to updated elements
+                    document.querySelectorAll('.user-city').forEach(el => {
+                        el.style.transition = 'opacity 0.5s ease-in';
+                        el.style.opacity = '0';
+                        setTimeout(() => {
+                            el.style.opacity = '1';
+                        }, 100);
+                    });
+                }
+                
+                // Start detection immediately
+                detectLocation();
+            });
+        </script>
+        <section id="pricing" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-navy">Find the Perfect Plan</h2>
+                    <p class="mt-4 text-lg text-gray-600">Start for free and upgrade for powerful AI features.</p>
+                </div>
+
+                <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-stretch">
+                    
+                    <div class="border border-gray-200 rounded-lg p-8 flex flex-col bg-white shadow-lg transition-transform hover:-translate-y-1 duration-300">
+                        <h3 class="text-2xl font-bold text-navy">Free</h3>
+                        <p class="mt-2 text-gray-500">For individual agents getting started.</p>
+                        
+                        <div class="mt-6">
+                            <span class="text-4xl font-extrabold text-navy">$0</span>
+                            <span class="text-base font-medium text-gray-500">/ month</span>
+                        </div>
+                        
+                        <ul class="mt-8 space-y-4 text-gray-700">
+                            <li class="flex items-start">
+                                <svg class="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span><b>Digital Open House Sign-In</b></span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7""></path></svg>
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-navy">100 % Data Privacy & Ownership</span>
+                                    <span class="text-xs text-gray-500">Data saved on your browsers. You keep your leads.</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7""></path></svg>
+                                <span class="font-bold text-navy">QR Code Property Maps</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span class="font-bold text-navy">Copy & Paste to CSV</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <div class="flex flex-col">
+                                <span class="font-bold text-navy">No Credit Card Required</span>
+                                <span class="text-xs text-gray-500">Setup in 1 minutes</span>
+                                </div>
+                            </li>
+                        </ul>
+                        
+                        <div class="mt-auto pt-8">
+                            <a href="start.html" target="_blank" class="block w-full text-center bg-navy text-white font-bold py-3 px-6 rounded-lg hover:bg-gold transition-colors">Get Started for Free</a>
+                        </div>
+                    </div>
+
+                    <div class="border-2 border-gold rounded-lg p-8 flex flex-col relative bg-white shadow-2xl transition-transform hover:-translate-y-1 duration-300">
+                        <span class="absolute top-0 -translate-y-1/2 bg-gold text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">Most Popular</span>
+                        
+                        <h3 class="text-2xl font-bold text-navy">AI Powered (Pro)</h3>
+                        <p class="mt-2 text-gray-500">For top agents who need an edge.</p>
+                        
+                        <div class="mt-6">
+                            <span class="text-4xl font-extrabold text-navy">$9</span>
+                            <span class="text-base font-medium text-gray-500">/ month</span>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">After a 7-day free trial.</p>
+                        
+                        <ul class="mt-8 space-y-4 text-gray-700">
+                            <li class="flex items-start text-gray-500">
+                                <svg class="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span class="font-bold text-navy">Everything in Free, plus:</span>
+                            </li>
+                            
+                            <li class="flex items-start font-bold text-navy">
+                                <svg class="w-6 h-6 text-gold mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>Instant CSV Export</span>
+                            </li>
+                            
+                            <li class="flex items-start font-bold text-navy">
+                                <svg class="w-6 h-6 text-gold mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <div class="flex flex-col">
+                                <span class="font-bold text-navy">AI Powered Location Insights</span>
+                                <span class="text-xs text-gray-500">Nearby dinig, shopping, transportation & schools.</span>
+                            </li>
+                            
+                            <li class="flex items-start font-bold text-navy">
+                                <svg class="w-6 h-6 text-gold mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>Impress Sellers with Professional Tech</span>
+                            </li>
+                        </ul>
+                        
+                        <div class="mt-auto pt-8">
+                            <a href="https://buy.stripe.com/14A4gzc6oh2Y7IHf2IdMI01" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            class="block w-full text-center bg-gold text-white font-bold py-3 px-6 rounded-lg hover:bg-navy transition-colors shadow-md hover:shadow-lg">
+                                Start 7-Day Free Trial
+                            </a>
+                            <p class="mt-2 text-xs text-gray-400 text-center">Cancel anytime.</p>
+                            
+                            <div class="mt-4 text-center text-sm text-gray-500">
+                                Already a Pro user? 
+                                <a href="#" onclick="event.preventDefault(); restorePurchase();" class="font-semibold text-gold hover:underline">Restore Access</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!-- Contact Form -->
+        <section class="py-20 bg-white">
+            <div class="container mx-auto px-6 max-w-xl text-center">
+                 <h2 class="text-3xl md:text-4xl font-bold text-navy">Get In Touch</h2>
+                 <p class="mt-4 text-lg text-gray-600">Have questions? We'd love to hear from you.</p>
+
+                 <form class="mt-10 text-left">
+                     <div class="mb-6">
+                         <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                         <input type="text" id="name" class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-gold focus:border-gold">
+                     </div>
+                     <div class="mb-6">
+                         <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                         <input type="email" id="email" class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-gold focus:border-gold">
+                     </div>
+                     <div class="mb-6">
+                         <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                         <textarea id="message" rows="4" class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-gold focus:border-gold"></textarea>
+                     </div>
+                     <div class="text-center">
+                         <button type="submit" class="bg-navy text-white font-bold py-3 px-8 rounded-lg hover:bg-gold transition-colors transform hover:scale-105">Send Message</button>
+
+                     </div>
+                 </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-navy text-white py-12">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-2xl font-bold">Elevate Your Open House Experience</p>
+            <p class="mt-4 max-w-3xl mx-auto text-gray-400">The Premier Tool for Major US Markets. The preferred digital sign-in solution for real estate agents in the United States, Canada, and North America.</p>
+            <div class="mt-6 text-gray-500 flex justify-center items-center space-x-4">
+                <span>corporealpartners@gmail.com</span>
+                <span class="text-gray-600">|</span>
+                <!-- NOTE: Replace '#' with your Stripe Customer Portal link -->
+                <a href="#" class="hover:text-gold hover:underline">Manage Subscription</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    function restorePurchase() {
+        const email = prompt("Please enter the email you used to purchase:");
+        if (email) {
+            alert("We have sent a magic link to " + email + ". Click it to log in.");
+            // In a real app, you'd trigger an email. 
+            // For Hackathon/MVP: Just tell them to search their inbox for the Stripe Receipt!
+            alert("💡 Tip: Search your email for your 'Stripe Receipt' and click the link inside to get back in!");
+        }
+    }
+    </script>
+
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>

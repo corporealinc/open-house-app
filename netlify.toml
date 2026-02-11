@@ -1,0 +1,13 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# This part enables Pretty URLs automatically
+[context.production.processing]
+  skip_processing = false
+[context.production.processing.html]
+  pretty_urls = true
