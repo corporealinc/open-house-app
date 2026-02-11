@@ -321,7 +321,7 @@
             return `<div class="relative group cursor-pointer bg-alabaster rounded-xl border-2 border-dashed border-gray-200 hover:border-gold flex items-center justify-center overflow-hidden transition-all ${classes}" onclick="document.getElementById('${id}').click()">
                 ${hasImg ? `<img src="${hasImg}" class="w-full h-full object-cover">` : `<div class="text-center"><div class="text-2xl mb-2 grayscale opacity-50">${label.split(' ')[0]}</div><div class="text-[10px] font-bold text-navy uppercase tracking-widest">${label.split(' ').slice(1).join(' ')}</div></div>`}
                 <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-white text-xs font-bold uppercase">Change</div>
-                <input type="file" id="${id}" class="hidden" accept="image/*" onchange="handleImage(this, '${key}')">
+                <input type="file" id="${id}" class="hidden" accept="image/*" onchange="handleImage(event, '${key}')">
             </div>`;
         }
 
@@ -439,9 +439,19 @@
             navigate('WELCOME');
         }
 
+        // Add 'e' as the parameter so the function receives the event
         window.handleImage = (e, k) => { 
-            const f = e.target.files[0]; 
-            if(f) { const r = new FileReader(); r.onload=(ev)=>{store.config[k]=ev.target.result; render();}; r.readAsDataURL(f); } 
+            // Check if e.target exists (standard event) OR use e directly (passed element)
+            const input = e.target || e; 
+            const f = input.files[0]; 
+            if(f) { 
+                const r = new FileReader(); 
+                r.onload=(ev)=>{
+                    store.config[k]=ev.target.result; 
+                    render(); // Refresh the UI to show the new image
+                }; 
+                r.readAsDataURL(f); 
+            } 
         }
 
         function toggleMenu(s) { 
