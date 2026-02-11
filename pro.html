@@ -228,28 +228,28 @@
             `;
             return div;
         }
-        
-        // --- 🤖 AI FUNCTION ---
+        // --- 🤖 AI FUNCTION (Direct Results, No "Thinking") ---
         async function generateAIHighlights() {
             const btn = document.getElementById('aiBtn');
             const field = document.getElementById('inpHighlights');
             const addr = document.getElementById('inpAddress').value;
             
+            // ⚠️ IMPORTANT: In production, use the Netlify build method!
             const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"; 
 
-            if (!GEMINI_API_KEY) {
-                alert("Please add your real Gemini API Key first.");
+            if (!GEMINI_API_KEY || GEMINI_API_KEY.includes("YOUR_GEMINI")) {
+                alert("Please add your real Gemini API Key in the code first.");
                 return;
             }
 
             if(!addr) { alert("Please enter a property address first."); return; }
-								  
 
-            // 2. UI LOADING STATE
+            // UI Loading State
             btn.innerHTML = '<span>⚡</span> Scouting...';
             btn.classList.add('ai-sparkle');
+            btn.disabled = true;
             
-            // 3. PROMPT - FORCE MARKDOWN LIST
+            // Prompt (Direct instructions)
             const prompt = `You are a luxury real estate concierge. For the address: "${addr}", identify the best nearby amenities.
             
             Format the output strictly as a Markdown Bulleted List.
@@ -264,26 +264,40 @@
             Do not write any intro or outro text. Just the 4 bullet points.`;
 
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        contents: [{ parts: [{ text: prompt }] }],
-                        generationConfig: { thinkingConfig: { thinkingLevel: "low" } }
-                    })
-                });
+                // Helper to fetch (Removed 'thinkingConfig')
+                const fetchGemini = async (model) => {
+                    return fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            contents: [{ parts: [{ text: prompt }] }] 
+                            // REMOVED: generationConfig: { thinkingConfig: ... } 
+                        })
+                    });
+                };
 
-                const data = await response.json();
+                let response;
+                let data;
+
+                // 🚨 PRIMARY ATTEMPT: Gemini 3 Flash (Fast & Direct)
+                console.log("Attempting Gemini 3 Flash...");
+                response = await fetchGemini('gemini-3-flash-preview');
+
+                // 🚨 BACKUP ATTEMPT: Gemini 2.0 Flash
+                if (!response.ok) {
+                    console.warn("3 Flash failed, switching to 2.0 Flash backup...");
+                    response = await fetchGemini('gemini-2.0-flash');
+                }
+
+                data = await response.json();
 
                 if (!response.ok) {
-                    console.error("API Error:", data);
-                    alert(`API Error: ${data.error?.message || "Check console"}`);
-                    throw new Error(data.error?.message);
+                    throw new Error(data.error?.message || "AI Service Unavailable");
                 }
 
                 const aiText = data.candidates[0].content.parts[0].text;
                 
-                // 5. TYPING EFFECT
+                // Typing Effect
                 field.value = "";
                 let i = 0;
                 const typeWriter = setInterval(() => {
@@ -295,9 +309,11 @@
 
             } catch (error) {
                 console.error("System Error:", error);
+                alert(`AI Error: ${error.message}. Please try again later.`);
             } finally {
                 btn.innerHTML = '<span>✨</span> Generate Local Insights';
                 btn.classList.remove('ai-sparkle');
+                btn.disabled = false;
             }
         }
         function renderUploadBox(id, key, label, classes) {
