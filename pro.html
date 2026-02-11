@@ -236,10 +236,11 @@
             
             const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"; 
 
-            if (!GEMINI_API_KEY || GEMINI_API_KEY.includes("YOUR_GEMINI_API_KEY")) {
-                alert("Please add your real Gemini API Key in the code first.");
+            if (!GEMINI_API_KEY) {
+                alert("Please add your real Gemini API Key first.");
                 return;
             }
+
             if(!addr) { alert("Please enter a property address first."); return; }
 
             btn.innerHTML = '<span>⚡</span> Scouting...';
