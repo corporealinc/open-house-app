@@ -211,8 +211,8 @@
         </nav>
     </header>
 
-      <main>
-            <section class="relative bg-navy overflow-hidden" style="height: 85vh; min-height: 600px;">
+    <main>
+        <section class="relative bg-navy overflow-hidden" style="height: 85vh; min-height: 600px;">
             
             <div id="slider-container" class="relative w-full h-full">
                 
@@ -901,35 +901,44 @@
             </div>
         </section>
         <!-- Contact Form -->
-        <section class="py-20 bg-white">
-            <div class="container mx-auto px-6 max-w-xl text-center">
-                 <h2 class="text-3xl md:text-4xl font-bold text-navy">Get In Touch</h2>
-                 <p class="mt-4 text-lg text-gray-600">Have questions? We'd love to hear from you.</p>
+        <section id="contact" class="py-20 bg-alabaster">
+        <div class="container mx-auto px-6">
+            
+            <div class="text-center mb-12 max-w-2xl mx-auto">
+                <h2 class="text-3xl md:text-3xl font-bold text-navy mb-6">
+                    Get In Touch
+                </h2>
+                <p class="text-gray-600 text-lg">
+                    Have questions? We'd love to hear from you.
+                    <br />
+                    Looking for a new feature? Share with us.
+                </p>
+                </div>
 
-                 <form name="contact" method="POST" data-netlify="true" action="success.html" class="mt-10 text-left max-w-xl mx-auto">
-    
+                <form name="contact" method="POST" data-netlify="true" action="success.html" class="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-xl border-t-4 border-gold">
+                    
                     <input type="hidden" name="form-name" value="contact" />
 
                     <div class="mb-6">
                         <label for="name" class="block text-sm font-bold text-navy mb-2 uppercase tracking-wide">Name</label>
                         <input type="text" id="name" name="name" required
-                            class="block w-full px-4 py-3 bg-white text-navy border-2 border-gray-200 rounded-lg focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all">
+                            class="block w-full px-4 py-3 bg-gray-50 text-navy border border-gray-200 rounded-lg focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all">
                     </div>
 
                     <div class="mb-6">
                         <label for="email" class="block text-sm font-bold text-navy mb-2 uppercase tracking-wide">Email</label>
                         <input type="email" id="email" name="email" required
-                            class="block w-full px-4 py-3 bg-white text-navy border-2 border-gray-200 rounded-lg focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all">
+                            class="block w-full px-4 py-3 bg-gray-50 text-navy border border-gray-200 rounded-lg focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all">
                     </div>
 
                     <div class="mb-6">
                         <label for="message" class="block text-sm font-bold text-navy mb-2 uppercase tracking-wide">Message</label>
                         <textarea id="message" name="message" rows="4" required
-                            class="block w-full px-4 py-3 bg-white text-navy border-2 border-gray-200 rounded-lg focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all"></textarea>
+                            class="block w-full px-4 py-3 bg-gray-50 text-navy border border-gray-200 rounded-lg focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all"></textarea>
                     </div>
 
                     <div class="text-center">
-                        <button type="submit" class="bg-navy text-white font-bold py-3 px-10 rounded-lg hover:bg-gold hover:shadow-lg transition-all transform hover:-translate-y-1">
+                        <button type="submit" class="w-full bg-navy text-white font-bold py-4 px-8 rounded-lg hover:bg-gold hover:shadow-lg transition-all transform hover:-translate-y-1 text-lg">
                             Send Message
                         </button>
                     </div>
