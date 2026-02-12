@@ -230,21 +230,35 @@
             `;
             return div;
         }
+
+        // --- NEW: Helper function to get the API Key securely ---
+        async function getApiKey() {
+            try {
+                // This calls the Netlify Function we created
+                const response = await fetch('/.netlify/functions/get-gemini-key');
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+                return data.key;
+            } catch (error) {
+                console.error("Failed to load API key:", error);
+                return null;
+            }
+        }
+
         // --- 🤖 AI FUNCTION (Direct Results, No "Thinking") ---
         async function generateAIHighlights() {
             const btn = document.getElementById('aiBtn');
             const field = document.getElementById('inpHighlights');
             const addr = document.getElementById('inpAddress').value;
-            
-            // ⚠️ IMPORTANT: In production, use the Netlify build method!
-            const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"; 
+            if(!addr) { alert("Please enter a property address first."); return; }
+														  
+            // Fetch the key securely
+            const GEMINI_API_KEY = await getApiKey();
 
-            if (!GEMINI_API_KEY || GEMINI_API_KEY.includes("YOUR_GEMINI")) {
-                alert("Please add your real Gemini API Key in the code first.");
+            if (!GEMINI_API_KEY) {
+                alert("Security Error: Could not load API Key. Please check your Netlify settings.");
                 return;
             }
-
-            if(!addr) { alert("Please enter a property address first."); return; }
 
             // UI Loading State
             btn.innerHTML = '<span>⚡</span> Scouting...';
@@ -449,8 +463,32 @@
             if(f) { 
                 const r = new FileReader(); 
                 r.onload=(ev)=>{
-                    store.config[k]=ev.target.result; 
-                    render(); // Refresh the UI to show the new image
+                    // 1. Create a canvas to resize the image
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Resize to max 800px width
+                        const MAX_WIDTH = 800;
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // Compress to JPEG 70%
+                        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                        store.config[k] = compressedDataUrl;
+                        render();
+                    };
+                    img.src = ev.target.result;
                 }; 
                 r.readAsDataURL(f); 
             } 
