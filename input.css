@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add your custom styles here if you have any */
+.glass { background: rgba(27, 42, 65, 0.90); backdrop-filter: blur(10px); }
+.fade-in { animation: fadeIn 0.5s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
