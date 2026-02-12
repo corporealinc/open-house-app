@@ -161,9 +161,23 @@
                     document.getElementById('viewVisitorsSetupBtn')?.addEventListener('click', showVisitorsModal);
                     break;
                 case 'WELCOME':
-                    document.getElementById('menuBtn')?.addEventListener('click', () => toggleMenu(true));
-                    document.getElementById('startTourBtn')?.addEventListener('click', () => navigate('SIGN_IN'));
-                    break;
+                // 1. Menu Button: STOP propagation so it doesn't trigger the sign-in
+                document.getElementById('menuBtn')?.addEventListener('click', (e) => {
+                    e.stopPropagation(); // <--- CRITICAL: Prevents clicking "through" to the background
+                    toggleMenu(true);
+                });
+
+                // 2. Start Button: Manual click (Standard)
+                document.getElementById('startTourBtn')?.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Good practice
+                    navigate('SIGN_IN');
+                });
+
+                // 3. WHOLE SCREEN: Tap anywhere to sign in
+                document.getElementById('welcome-screen')?.addEventListener('click', () => {
+                    navigate('SIGN_IN');
+                });
+                break;
                 case 'SIGN_IN':
                     document.getElementById('cancelBtn')?.addEventListener('click', () => navigate('WELCOME'));
                     document.querySelectorAll('[data-wizard-button]').forEach(btn => {
@@ -357,57 +371,94 @@
             </div>`;
         }
 
-        // --- 2. WELCOME SCREEN ---
+        // --- 2. WELCOME SCREEN (Perfect Bottom Alignment) ---
         function renderWelcome() {
             const div = document.createElement('div');
-            div.className = "h-full w-full flex flex-col";
+            div.id = "welcome-screen"; 
+            div.className = "h-full w-full flex flex-col relative cursor-pointer overflow-y-auto custom-scroll"; 
+            
             const bgStyle = store.config.photo ? `background-image: url('${store.config.photo}');` : 'background-color: #1B2A41;';
-            const logoHtml = store.config.logo ? `<img src="${store.config.logo}" class="w-[150px] object-contain">` : '<div></div>';
+            
+            // LOGO: Hidden on mobile, constrained width on Desktop
+            const logoHtml = store.config.logo ? `<img src="${store.config.logo}" class="hidden md:block w-[150px] object-contain self-start">` : '<div></div>';
+            
             const highlightsHtml = store.config.highlights ? marked.parse(store.config.highlights.replace(/\n/g, '\n\n')) : '';
 
             div.innerHTML = `
-                <div class="absolute inset-0 bg-cover bg-center transition-all duration-1000" style="${bgStyle}"><div class="absolute inset-0 bg-navy/85"></div></div>
-                <div class="relative z-10 w-full p-8 flex justify-between items-start fade-in">
-                    ${logoHtml} <button id="menuBtn" class="bg-white/10 backdrop-blur-md border border-white/20 text-white w-12 h-12 rounded-full hover:bg-white hover:text-navy transition-all flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+                <div class="fixed inset-0 bg-cover bg-center transition-all duration-1000 hover:scale-105" style="${bgStyle} z-index: -1;">
+                    <div class="absolute inset-0 bg-navy/85 hover:bg-navy/80 transition-all"></div>
                 </div>
-                <div class="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 fade-in w-full max-w-5xl mx-auto">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center w-full">
-                        <div class="text-center md:text-left">
-                            <p class="text-gold font-bold uppercase tracking-[0.3em] text-sm mb-4">Welcome to</p>
-                            <h1 class="text-5xl md:text-6xl font-serif text-white mb-6 leading-tight">${store.config.address || 'Open House'}</h1>
+                
+                <div class="relative z-20 w-full p-6 md:p-8 flex justify-between items-start fade-in shrink-0">
+                    ${logoHtml} 
+                    <button id="menuBtn" class="ml-auto bg-white/20 backdrop-blur-md border border-white/30 text-white w-12 h-12 md:w-14 md:h-14 rounded-full hover:bg-white hover:text-navy transition-all flex items-center justify-center shadow-lg active:scale-95">
+                        <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 py-8 fade-in w-full max-w-6xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16 items-center w-full">
+                        
+                        <div class="text-center md:text-left order-1">
+                            <p class="text-gold font-bold uppercase tracking-[0.3em] text-xs md:text-sm mb-3 md:mb-4">Welcome to</p>
+                            <h1 class="text-4xl lg:text-6xl font-serif text-white mb-6 leading-tight">${store.config.address || 'Open House'}</h1>
+                            
                             <div class="flex flex-wrap justify-center md:justify-start gap-4 text-gray-300 font-light text-lg mb-8">
                                 <span class="whitespace-nowrap">${store.config.price || ''}</span>
                                 ${store.config.beds ? `<span class="hidden sm:inline">•</span><span class="whitespace-nowrap">${store.config.beds} Beds</span>` : ''}
                                 ${store.config.baths ? `<span class="hidden sm:inline">•</span><span class="whitespace-nowrap">${store.config.baths} Baths</span>` : ''}
                             </div>
-                            <button id="startTourBtn" class="group relative px-10 py-5 bg-gold text-white font-bold uppercase tracking-widest rounded-full overflow-hidden shadow-2xl shadow-gold/30 transition-transform hover:scale-105 active:scale-95">
-                                <span class="relative z-10">Sign In</span><div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                            
+                            <button id="startTourBtn" class="group relative px-10 py-5 bg-gold text-white font-bold uppercase tracking-widest rounded-full overflow-hidden shadow-2xl shadow-gold/30 transition-transform hover:scale-105 active:scale-95 animate-pulse-slow">
+                                <span class="relative z-10">Sign In</span>
+                                <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                             </button>
+                            <p class="mt-4 text-white/40 text-xs uppercase tracking-widest font-bold md:hidden">Tap anywhere to start</p>
                         </div>
-                        ${highlightsHtml ? `<div class="glass p-8 rounded-2xl border border-white/10 text-left shadow-2xl transform transition-all hover:-translate-y-1">
-                            <div class="text-gold text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2"><span class="text-lg">📍</span> Location Highlights</div>
-                            <div class="insights-content text-white leading-relaxed">${highlightsHtml}</div>
-                        </div>` : ''}
+
+                        <div class="order-2 w-full">
+                            ${highlightsHtml ? `
+                            <div class="glass p-6 lg:p-10 rounded-2xl border border-white/10 text-left shadow-2xl mx-auto max-w-lg md:max-w-none">
+                                <div class="text-gold text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <span class="text-lg">📍</span> Location Highlights
+                                </div>
+                                <div class="insights-content text-white leading-relaxed text-sm lg:text-base">
+                                    ${highlightsHtml}
+                                </div>
+                            </div>` : ''}
+                        </div>
                     </div>
                 </div>
-                <div class="relative z-20 w-full p-8 flex flex-col md:flex-row items-end justify-between gap-6 fade-in pb-12">
-                    <div class="hidden md:flex flex-col items-center gap-2">
-                        <div class="bg-white p-3 rounded-xl shadow-2xl h-[154px] w-[154px] flex items-center justify-center"><div id="qrcode"></div></div>
+
+                <div class="relative z-20 w-full p-8 hidden md:flex items-end justify-between gap-6 fade-in shrink-0 pb-12">
+                    
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="bg-white p-3 rounded-xl shadow-2xl h-[154px] w-[154px] flex items-center justify-center">
+                            <div id="qrcode"></div>
+                        </div>
                         <div class="text-[10px] text-white/80 font-bold uppercase tracking-widest bg-navy/50 px-3 py-1 rounded backdrop-blur-sm shadow-sm">Map Property</div>
                     </div>
-                    <div class="glass px-8 rounded-2xl flex items-center gap-6 border border-white/10 shadow-2xl max-w-md w-full md:w-auto h-[154px]">
-                        ${store.config.headshot ? `<img src="${store.config.headshot}" class="w-24 h-24 rounded-full object-cover border-2 border-gold shadow-lg">` : ''}
-                        <div class="text-left flex flex-col justify-center h-full py-4">
-                            <div class="text-white font-serif text-2xl leading-tight mb-2">${store.config.agent || ''}</div>
-                            <div class="text-gold text-[11px] font-bold uppercase tracking-widest flex flex-col gap-1">
-                                <span>${store.config.phone || ''}</span>
-                                <span class="opacity-90 lowercase" style="text-transform: none;">${store.config.email || ''}</span>
+                    
+                    <div class="flex flex-col items-center gap-2 w-full md:w-auto">
+                        <div class="glass px-8 rounded-2xl flex items-center gap-6 border border-white/10 shadow-2xl max-w-md w-full md:w-auto h-[154px]">
+                            ${store.config.headshot ? `<img src="${store.config.headshot}" class="w-24 h-24 rounded-full object-cover border-2 border-gold shadow-lg">` : ''}
+                            <div class="text-left flex flex-col justify-center h-full py-4">
+                                <div class="text-white font-serif text-2xl leading-tight mb-2">${store.config.agent || ''}</div>
+                                <div class="text-gold text-[11px] font-bold uppercase tracking-widest flex flex-col gap-1">
+                                    <span>${store.config.phone || ''}</span>
+                                    <span class="opacity-90 lowercase" style="text-transform: none;">${store.config.email || ''}</span>
+                                </div>
                             </div>
                         </div>
+                        <div class="text-[10px] text-transparent font-bold uppercase tracking-widest px-3 py-1 select-none">Spacer</div>
                     </div>
-                    <div class="hidden md:block w-[154px]"></div> 
+                    
+                    <div class="w-[154px]"></div> 
                 </div>`;
 
+            // QR Generation
             setTimeout(() => { 
                 if(store.config.address) {
                     const qrContainer = document.getElementById("qrcode");
@@ -421,7 +472,6 @@
             }, 100);
             return div;
         }
-
         // --- 3. FORM ---
         const questions = [
             { id: 'name', label: "Full Name?", type: 'text', placeholder: 'First & Last Name' },
@@ -457,8 +507,16 @@
             return div;
         }
 
-       // --- UTILS ---
+        // --- UTILS (Updated Save Function) ---
         function saveAndLaunch() {
+            const btn = document.getElementById('startBtn');
+            
+            // 1. UI Feedback: Change Text & Disable to prevent double-click
+            btn.innerHTML = "🚀 Launching...";
+            btn.disabled = true;
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+            // 2. Save Data from Inputs to the Store
             store.config.address = document.getElementById('inpAddress').value;
             store.config.price = document.getElementById('inpPrice').value;
             store.config.beds = document.getElementById('inpBeds').value;
@@ -467,8 +525,15 @@
             store.config.email = document.getElementById('inpEmail').value;
             store.config.phone = document.getElementById('inpPhone').value;
             store.config.highlights = document.getElementById('inpHighlights').value; 
+            
+            // Save to browser memory
             localStorage.setItem('estate_config_ai', JSON.stringify(store.config));
-            navigate('WELCOME');
+
+            // 3. Navigate (Small delay to let UI update visually)
+            setTimeout(() => {
+                // 'WELCOME' refers to the Cover Screen (Photo + Sign In Button).
+                navigate('WELCOME'); 
+            }, 500);
         }
 
         // Add 'e' as the parameter so the function receives the event

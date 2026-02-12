@@ -348,8 +348,16 @@
             return div;
         }
 
-        // --- UTILS ---
+        // --- UTILS (Updated Save Function) ---
         function saveAndLaunch() {
+            const btn = document.getElementById('startBtn');
+            
+            // 1. UI Feedback: Change Text & Disable to prevent double-click
+            btn.innerHTML = "🚀 Launching...";
+            btn.disabled = true;
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+            // 2. Save Data from Inputs to the Store
             store.config.address = document.getElementById('inpAddress').value;
             store.config.price = document.getElementById('inpPrice').value;
             store.config.beds = document.getElementById('inpBeds').value;
@@ -357,8 +365,16 @@
             store.config.agent = document.getElementById('inpAgent').value;
             store.config.email = document.getElementById('inpEmail').value;
             store.config.phone = document.getElementById('inpPhone').value;
-            localStorage.setItem('estate_config_free', JSON.stringify(store.config));
-            navigate('WELCOME');
+            store.config.highlights = document.getElementById('inpHighlights').value; 
+            
+            // Save to browser memory
+            localStorage.setItem('estate_config_ai', JSON.stringify(store.config));
+
+            // 3. Navigate (Small delay to let UI update visually)
+            setTimeout(() => {
+                // 'WELCOME' refers to the Cover Screen (Photo + Sign In Button).
+                navigate('WELCOME'); 
+            }, 500);
         }
 
         // Add 'e' as the parameter so the function receives the event
