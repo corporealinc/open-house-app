@@ -63,7 +63,7 @@
 
     <div id="menuOverlay" class="fixed inset-0 z-50 invisible opacity-0 transition-all duration-300">
         <div id="menuOverlayBg" class="absolute inset-0 bg-navy/60 backdrop-blur-sm"></div>
-        <div id="menuPanel" class="absolute right-0 top-0 h-full w-80 bg-white shadow-2xl transition-transform duration-300 translate-x-full flex flex-col">
+        <div id="menuPanel" class="absolute left-0 top-0 h-full w-80 bg-white shadow-2xl transition-transform duration-300 -translate-x-full flex flex-col">
             <div class="p-8 bg-navy text-white flex justify-between items-center">
                 <h2 class="text-2xl font-serif uppercase tracking-tight">Admin Menu</h2>
                 <button id="menuCloseBtn" class="p-2 hover:bg-white/10 rounded-full text-xl">✕</button>
@@ -83,7 +83,6 @@
             </div>
         </div>
     </div>
-
     <div id="visitorModal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
         <div id="modalOverlayBg" class="absolute inset-0 bg-navy/90 backdrop-blur-md"></div>
         <div class="bg-white w-full max-w-6xl h-[80vh] rounded-xl shadow-2xl relative flex flex-col animate-[fadeIn_0.3s_ease-out]">
@@ -161,15 +160,15 @@
                     document.getElementById('viewVisitorsSetupBtn')?.addEventListener('click', showVisitorsModal);
                     break;
                 case 'WELCOME':
-                // 1. Menu Button: STOP propagation so it doesn't trigger the sign-in
+                // 1. Menu Button: STOP propagation
                 document.getElementById('menuBtn')?.addEventListener('click', (e) => {
-                    e.stopPropagation(); // <--- CRITICAL: Prevents clicking "through" to the background
+                    e.stopPropagation(); // Prevents "Tap Anywhere" logic
                     toggleMenu(true);
                 });
 
-                // 2. Start Button: Manual click (Standard)
+                // 2. Start Button: Manual click
                 document.getElementById('startTourBtn')?.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Good practice
+                    e.stopPropagation(); 
                     navigate('SIGN_IN');
                 });
 
@@ -371,7 +370,7 @@
             </div>`;
         }
 
-        // --- 2. WELCOME SCREEN (Perfect Bottom Alignment) ---
+        // --- 2. WELCOME SCREEN (Left-Aligned Menu & Logo Stack) ---
         function renderWelcome() {
             const div = document.createElement('div');
             div.id = "welcome-screen"; 
@@ -379,8 +378,11 @@
             
             const bgStyle = store.config.photo ? `background-image: url('${store.config.photo}');` : 'background-color: #1B2A41;';
             
-            // LOGO: Hidden on mobile, constrained width on Desktop
-            const logoHtml = store.config.logo ? `<img src="${store.config.logo}" class="hidden md:block w-[150px] object-contain self-start">` : '<div></div>';
+            // LOGO: Simplified. No absolute positioning needed here because the parent container handles it.
+            // 'object-left' ensures it aligns with the menu button edge.
+            const logoHtml = store.config.logo ? 
+                `<img src="${store.config.logo}" class="hidden md:block w-[150px] object-contain object-left drop-shadow-md">` : 
+                '';
             
             const highlightsHtml = store.config.highlights ? marked.parse(store.config.highlights.replace(/\n/g, '\n\n')) : '';
 
@@ -389,16 +391,18 @@
                     <div class="absolute inset-0 bg-navy/85 hover:bg-navy/80 transition-all"></div>
                 </div>
                 
-                <div class="relative z-20 w-full p-6 md:p-8 flex justify-between items-start fade-in shrink-0">
-                    ${logoHtml} 
-                    <button id="menuBtn" class="ml-auto bg-white/20 backdrop-blur-md border border-white/30 text-white w-12 h-12 md:w-14 md:h-14 rounded-full hover:bg-white hover:text-navy transition-all flex items-center justify-center shadow-lg active:scale-95">
+                <div class="absolute top-0 left-0 z-50 p-6 md:p-12 flex flex-col items-start gap-6">
+                    
+                    <button id="menuBtn" class="bg-white/20 backdrop-blur-md border border-white/30 text-white w-12 h-12 md:w-14 md:h-14 rounded-full hover:bg-white hover:text-navy transition-all flex items-center justify-center shadow-lg active:scale-95">
                         <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
+
+                    ${logoHtml}
                 </div>
 
-                <div class="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 py-8 fade-in w-full max-w-6xl mx-auto">
+                <div class="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 py-8 fade-in w-full max-w-6xl mx-auto pt-32 md:pt-0">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16 items-center w-full">
                         
                         <div class="text-center md:text-left order-1">
@@ -432,7 +436,7 @@
                     </div>
                 </div>
 
-                <div class="relative z-20 w-full p-8 hidden md:flex items-end justify-between gap-6 fade-in shrink-0 pb-12">
+                <div class="relative z-20 w-full p-6 md:p-12 hidden md:flex items-end justify-between gap-6 fade-in shrink-0 pb-12">
                     
                     <div class="flex flex-col items-center gap-2">
                         <div class="bg-white p-3 rounded-xl shadow-2xl h-[154px] w-[154px] flex items-center justify-center">
@@ -576,9 +580,18 @@
         }
 
         function toggleMenu(s) { 
-            const o=document.getElementById('menuOverlay'), p=document.getElementById('menuPanel'); 
-            if(s){o.classList.remove('invisible','opacity-0');p.classList.remove('translate-x-full')}
-            else{o.classList.add('invisible','opacity-0');p.classList.add('translate-x-full')} 
+        const o = document.getElementById('menuOverlay');
+        const p = document.getElementById('menuPanel'); 
+            
+            if (s) {
+                o.classList.remove('invisible', 'opacity-0');
+                // Remove the negative translate to slide it into view (0px)
+                p.classList.remove('-translate-x-full'); 
+            } else {
+                o.classList.add('invisible', 'opacity-0');
+                // Add negative translate to slide it back off-screen to the left
+                p.classList.add('-translate-x-full'); 
+            } 
         }
 
         function showVisitorsModal() {
