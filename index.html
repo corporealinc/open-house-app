@@ -11,20 +11,21 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Open House Sign-In Sheet | Digital & AI Powered</title>
-    <meta name="description" content="The professional, AI powered open house sign-in sheet for real estate agents.">
+    <title>Free Digital Open House Sign-In for Realtors | AI-Powered</title>
+    <meta name="title" content="Free Digital Open House Sign-In for Realtors | AI-Powered">
+    <meta name="description" content="Free digital open house sign-in sheet for realtors. Get unlimited leads, AI local insights, and instant exports. No credit card required. Setup in 60 seconds.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://openhousesheet.com/">
-    <meta property="og:title" content="Open House Sign-In Sheet">
-    <meta property="og:description" content="Capture leads professionally with the #1 digital open house app.">
+    <meta property="og:title" content="Free Digital Open House Sign-In for Realtors | AI-Powered">
+    <meta property="og:description" content="Free digital open house sign-in sheet for realtors. Get unlimited leads, AI local insights, and instant exports. No credit card required.">
     <meta property="og:image" content="https://openhousesheet.com/images/logo.png">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://openhousesheet.com/">
-    <meta property="twitter:title" content="Open House Sign-In Sheet">
-    <meta property="twitter:description" content="Capture leads professionally with the #1 digital open house app.">
+    <meta property="twitter:title" content="Free Digital Open House Sign-In for Realtors | AI-Powered">
+    <meta property="twitter:description" content="Free digital open house sign-in sheet for realtors. Get unlimited leads, AI local insights, and instant exports.">
     <meta property="twitter:image" content="https://openhousesheet.com/images/logo.png">
     <title>The #1 Digital Open House Sign-In Sheet for Realtors | Powered by AI</title>
-    <meta name="description" content="Capture every lead with the premier digital open house sign-in app. Features AI follow-up, instant QR codes, and offline mode. Try it free today.">
+    <meta name="description" content="Free digital open house sign-in sheet for realtors. Get unlimited leads, AI local insights, and instant exports. No credit card required. Setup in 60 seconds.">
     <link rel="icon" type="image/png" href="images/logo.png" sizes="32x32">
     <link rel="icon" type="image/svg+xml" href="images/logo.svg">
     <link rel="apple-touch-icon" sizes="180x180" href="images/logo.png">
@@ -171,10 +172,23 @@
     "name": "Open House Sheet",
     "url": "https://openhousesheet.com",
     "logo": "https://openhousesheet.com/images/logo.png",
+    "description": "The #1 digital open house sign-in sheet for real estate agents.",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "corporealpartners@gmail.com",
+        "contactType": "customer support"
+      }
     }
     </script>
+        <style>
+        body { font-family: 'Inter', sans-serif; }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } 
+        }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-50 text-gray-800" flex flex-col min-h-screen>
 
     <header class="bg-navy text-white sticky top-0 z-50 shadow-md">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -195,23 +209,37 @@
                 <a href="index.html" class="text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 px-3 py-2 rounded-md transition-all">Home</a>
                 <a href="#about" class="text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 px-3 py-2 rounded-md transition-all">About</a>
                 <a href="start.html" target="_blank" class="text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 px-3 py-2 rounded-md transition-all">Open House (Free)</a>
-                <a href="#pricing" class="text-sm font-bold bg-gold text-navy px-5 py-2.5 rounded-full hover:bg-white transition-all shadow-lg hover:shadow-gold/20 transform hover:-translate-y-0.5">
+                <a href="sign-in-sheet.html" class="text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 px-3 py-2 rounded-md transition-all">Template (Free)</a>
+                <a href="#pro-plan" class="text-sm font-bold bg-gold text-navy px-5 py-2.5 rounded-full hover:bg-white transition-all shadow-lg hover:shadow-gold/20 transform hover:-translate-y-0.5">
                     AI Powered (Pro)
                 </a>
                 <a href="#pricing" class="text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 px-3 py-2 rounded-md transition-all">Pricing</a>
+                <a href="faq.html" class="text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 px-3 py-2 rounded-md transition-all">FAQ</a>
             </div>
 
             <div class="md:hidden flex items-center">
-                <button class="text-white hover:text-gold focus:outline-none p-2">
+                <button id="mobile-menu-btn" class="text-white hover:text-gold focus:outline-none p-2">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
             </div>
         </nav>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-navy border-t border-white/10">
+            <div class="px-4 pt-2 pb-4 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-base font-medium text-white hover:bg-white/10 rounded-md">Home</a>
+                <a href="#about" class="block px-3 py-2 text-base font-medium text-white hover:bg-white/10 rounded-md">About</a>
+                <a href="start.html" target="_blank" class="block px-3 py-2 text-base font-medium text-white hover:bg-white/10 rounded-md">Open House (Free)</a>
+                <a href="sign-in-sheet.html" class="block px-3 py-2 text-base font-medium text-white hover:bg-white/10 rounded-md">Template (Free)</a>
+                <a href="#pro-plan" class="block px-3 py-2 text-base font-bold text-gold hover:bg-white/10 rounded-md">AI Powered (Pro)</a>
+                <a href="#pricing" class="block px-3 py-2 text-base font-medium text-white hover:bg-white/10 rounded-md">Pricing</a>
+                <a href="faq.html" class="block px-3 py-2 text-base font-medium text-white hover:bg-white/10 rounded-md">FAQ</a>
+            </div>
+        </div>
     </header>
 
-    <main>
+    <main class="flex-grow">
         <section class="relative bg-navy overflow-hidden" style="height: 85vh; min-height: 600px;">
             
             <div id="slider-container" class="relative w-full h-full">
@@ -226,12 +254,12 @@
                             <p class="text-gray-300 text-lg leading-relaxed max-w-md">
                                 Ditch the paper. Present a sleek, branded digital sign-in that impresses visitors the moment they walk in.
                             </p>
-                            <a href="#pricing" class="inline-block bg-gold text-navy font-bold py-3 px-8 rounded-full hover:bg-white transition-all transform hover:scale-105">
+                            <a href="#pro-plan" class="inline-block bg-gold text-navy font-bold py-3 px-8 rounded-full hover:bg-white transition-all transform hover:scale-105">
                                 Try Pro for Free
                             </a>
                         </div>
                         <div class="h-auto w-full flex items-center justify-center order-1 md:order-2">
-                            <img src="images/about-2-b.png" alt="Open House Better Experience" class="w-full h-auto aspect-[1612/907] object-contain drop-shadow-2xl rounded-lg border border-white/10 max-h-[70vh]">
+                            <img src="images/about-2-b.png" alt="Realtor using digital open house sign-in sheet on iPad at luxury property" class="w-full h-auto aspect-[1612/907] object-contain drop-shadow-2xl rounded-lg border border-white/10 max-h-[70vh]">
                         </div>
                     </div>
                 </div>
@@ -391,7 +419,15 @@
         }
 
         function startAutoPlay() {
-            slideInterval = setInterval(nextSlide, 5000); // Change every 5 seconds
+            if(slides.length > 0) {
+                slideInterval = setInterval(nextSlide, 5000); 
+            }
+        }
+
+        // Initialize slider if slides exist
+        if (slides.length > 0) {
+            showSlide(0);
+            startAutoPlay();
         }
 
         // Initialize
@@ -480,7 +516,7 @@
                                 <div class="ml-4 flex-1 bg-white h-6 rounded-md text-[10px] text-gray-400 flex items-center px-2 truncate">openhousesheet.com/start</div>
                             </div>
                             <div class="aspect-video bg-gray-50">
-                                <img src="images/about-1-b.png" alt="OpenHouseAI Dashboard Interface for Real Estate Agents" class="w-full h-full object-cover object-top">
+                                <img src="images/about-1-b.png" alt="Real-time visitor dashboard showing open house attendees and lead details" class="w-full h-full object-cover object-top">
                             </div>
                         </div>
                     </div>
@@ -835,7 +871,7 @@
                                 <svg class="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 <div class="flex flex-col">
                                 <span class="font-bold text-navy">No Credit Card Required</span>
-                                <span class="text-xs text-gray-500">Setup in 1 minutes</span>
+                                <span class="text-xs text-gray-500">Setup in 1 minute</span>
                                 </div>
                             </li>
                         </ul>
@@ -845,7 +881,7 @@
                         </div>
                     </div>
 
-                    <div class="border-2 border-gold rounded-lg p-8 flex flex-col relative bg-white shadow-2xl transition-transform hover:-translate-y-1 duration-300">
+                    <div id="pro-plan" style="scroll-margin-top: 150px;" class="border-2 border-gold rounded-lg p-8 flex flex-col relative bg-white shadow-2xl transition-transform hover:-translate-y-1 duration-300">
                         <span class="absolute top-0 -translate-y-1/2 bg-gold text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">Most Popular</span>
                         
                         <h3 class="text-2xl font-bold text-navy">AI Powered (Pro)</h3>
@@ -872,7 +908,7 @@
                                 <svg class="w-6 h-6 text-gold mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 <div class="flex flex-col">
                                 <span class="font-bold text-navy">AI Powered Location Insights</span>
-                                <span class="text-xs text-gray-500">Nearby dinig, shopping, transportation & schools.</span>
+                                <span class="text-xs text-gray-500">Nearby dining, shopping, transportation & schools.</span>
                             </li>
                             
                             <li class="flex items-start font-bold text-navy">
@@ -900,80 +936,191 @@
                 </div>
             </div>
         </section>
-        <!-- Contact Form -->
+
         <section id="contact" class="py-20 bg-alabaster">
-        <div class="container mx-auto px-6">
-            
-            <div class="text-center mb-12 max-w-2xl mx-auto">
-                <h2 class="text-3xl md:text-3xl font-bold text-navy mb-6">
-                    Get In Touch
-                </h2>
-                <p class="text-gray-600 text-lg">
-                    Have questions? We'd love to hear from you.
-                    <br />
-                    Looking for a new feature? Share with us.
-                </p>
+            <div class="container mx-auto px-6">
+                
+                <div class="text-center mb-12 max-w-2xl mx-auto">
+                    <h2 class="text-3xl md:text-3xl font-bold text-navy mb-6">
+                        Get In Touch
+                    </h2>
+                    <p class="text-gray-600 text-lg">
+                        Have questions? We'd love to hear from you.
+                        <br />
+                        Looking for a new feature? Share with us.
+                    </p>
+                    </div>
+
+                    <form name="contact" method="POST" data-netlify="true" action="success.html" class="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-xl border-t-4 border-gold">
+                        
+                        <input type="hidden" name="form-name" value="contact" />
+
+                        <div class="mb-6">
+                            <label for="name" class="block text-sm font-bold text-navy mb-2 uppercase tracking-wide">Name</label>
+                            <input type="text" id="name" name="name" required
+                                class="block w-full px-4 py-3 bg-gray-50 text-navy border border-gray-200 rounded-lg focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all">
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="email" class="block text-sm font-bold text-navy mb-2 uppercase tracking-wide">Email</label>
+                            <input type="email" id="email" name="email" required
+                                class="block w-full px-4 py-3 bg-gray-50 text-navy border border-gray-200 rounded-lg focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all">
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="message" class="block text-sm font-bold text-navy mb-2 uppercase tracking-wide">Message</label>
+                            <textarea id="message" name="message" rows="4" required
+                                class="block w-full px-4 py-3 bg-gray-50 text-navy border border-gray-200 rounded-lg focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all"></textarea>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="w-full bg-navy text-white font-bold py-4 px-8 rounded-lg hover:bg-gold hover:shadow-lg transition-all transform hover:-translate-y-1 text-lg">
+                                Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+        </main>
+
+        <section id="faq" class="py-20 px-4 md:px-8 bg-white border-t border-gray-100">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-serif text-navy mb-4">Frequently Asked Questions</h2>
+                    <p class="text-gray-500">Common questions about our digital sign-in solution.</p>
                 </div>
 
-                <form name="contact" method="POST" data-netlify="true" action="success.html" class="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-xl border-t-4 border-gold">
+                <div class="space-y-4">
                     
-                    <input type="hidden" name="form-name" value="contact" />
-
-                    <div class="mb-6">
-                        <label for="name" class="block text-sm font-bold text-navy mb-2 uppercase tracking-wide">Name</label>
-                        <input type="text" id="name" name="name" required
-                            class="block w-full px-4 py-3 bg-gray-50 text-navy border border-gray-200 rounded-lg focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all">
+                    <div class="bg-alabaster rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors" onclick="toggleIndexFaq(this)">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-navy text-lg">Is it really free?</h3>
+                            <span class="faq-icon text-gold text-xl transition-transform duration-300">▼</span>
+                        </div>
+                        <div class="faq-content hidden pt-4 text-gray-600 leading-relaxed">
+                            Yes! The Free plan is $0/month. It allows unlimited sign-ins, stores data locally on your device for 100% privacy, and lets you copy/paste data to CSV. No credit card required.
+                        </div>
                     </div>
 
-                    <div class="mb-6">
-                        <label for="email" class="block text-sm font-bold text-navy mb-2 uppercase tracking-wide">Email</label>
-                        <input type="email" id="email" name="email" required
-                            class="block w-full px-4 py-3 bg-gray-50 text-navy border border-gray-200 rounded-lg focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all">
+                    <div class="bg-alabaster rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors" onclick="toggleIndexFaq(this)">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-navy text-lg">What does the Pro Plan include?</h3>
+                            <span class="faq-icon text-gold text-xl transition-transform duration-300">▼</span>
+                        </div>
+                        <div class="faq-content hidden pt-4 text-gray-600 leading-relaxed">
+                            For $9/month (after a 7-day free trial), the Pro plan adds <strong>Instant CSV Export</strong> and <strong>AI Location Insights</strong>, which automatically generate highlights for nearby dining, schools, and transport.
+                        </div>
                     </div>
 
-                    <div class="mb-6">
-                        <label for="message" class="block text-sm font-bold text-navy mb-2 uppercase tracking-wide">Message</label>
-                        <textarea id="message" name="message" rows="4" required
-                            class="block w-full px-4 py-3 bg-gray-50 text-navy border border-gray-200 rounded-lg focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all"></textarea>
+                    <div class="bg-alabaster rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors" onclick="toggleIndexFaq(this)">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-navy text-lg">How does the AI work?</h3>
+                            <span class="faq-icon text-gold text-xl transition-transform duration-300">▼</span>
+                        </div>
+                        <div class="faq-content hidden pt-4 text-gray-600 leading-relaxed">
+                            The AI scans the property address and instantly researches the neighborhood to find top-rated local amenities, school ratings, and transit options, helping you answer visitor questions effortlessly.
+                        </div>
                     </div>
 
-                    <div class="text-center">
-                        <button type="submit" class="w-full bg-navy text-white font-bold py-4 px-8 rounded-lg hover:bg-gold hover:shadow-lg transition-all transform hover:-translate-y-1 text-lg">
-                            Send Message
-                        </button>
+                    <div class="bg-alabaster rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition-colors" onclick="toggleIndexFaq(this)">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-navy text-lg">Do I need an internet connection?</h3>
+                            <span class="faq-icon text-gold text-xl transition-transform duration-300">▼</span>
+                        </div>
+                        <div class="faq-content hidden pt-4 text-gray-600 leading-relaxed">
+                            You need internet to load the page initially and to generate AI insights. However, if you lose connection during the open house, the sign-in sheet will still work, and data will save to your device.
+                        </div>
                     </div>
-                </form>
+                </div>
+
+                <div class="text-center mt-12">
+                    <a href="faq.html" class="text-navy font-bold border-b-2 border-gold hover:text-gold transition-colors">View all FAQs &rarr;</a>
+                </div>
             </div>
         </section>
 
-    </main>
+        <footer class="bg-navy text-white pt-16 pb-8 border-t border-white/10">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-8">
+                    <div class="text-center md:text-left">
+                        <a href="index.html" class="text-2xl font-bold text-white tracking-tight hover:text-gold transition-colors">
+                            OPEN HOUSE <span class="text-gold">APP</span>
+                        </a>
+                        <p class="mt-2 text-sm text-gray-400 max-w-xs mx-auto md:mx-0">
+                            The Premier Tool for Major US Markets. The preferred digital sign-in solution for real estate agents in the United States, Canada, and North America.
+                        </p>
+                    </div>
 
-    <!-- Footer -->
-    <footer class="bg-navy text-white py-12">
-        <div class="container mx-auto px-6 text-center">
-            <p class="text-2xl font-bold">Elevate Your Open House Experience</p>
-            <p class="mt-4 max-w-3xl mx-auto text-gray-400">The Premier Tool for Major US Markets. The preferred digital sign-in solution for real estate agents in the United States, Canada, and North America.</p>
-            <div class="mt-6 text-gray-500 flex justify-center items-center space-x-4">
-                <span>corporealpartners@gmail.com</span>
-                <span class="text-gray-600">|</span>
-                <!-- NOTE: Replace '#' with your Stripe Customer Portal link -->
-                <a href="#" class="hover:text-gold hover:underline">Manage Subscription</a>
+                    <div class="flex flex-wrap justify-center gap-6 md:gap-8">
+                        <a href="start.html" target="_blank" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Open House (Free)</a>
+                        <a href="sign-in-sheet.html" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Template (Free)</a>
+                        <a href="#pro-plan" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">AI Powered (Pro)</a>
+                        <a href="#pricing" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Pricing</a>
+                        <a href="faq.html" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">FAQ</a>
+                        <a href="#" onclick="event.preventDefault(); restorePurchase();" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Manage Subscription</a>
+                    </div>
+                </div>
+
+                <div class="border-t border-white/10 my-8"></div>
+
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+                    <div class="flex items-center gap-2">
+                        <span>&copy; 2026 Open House App. All rights reserved.</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <a href="mailto:corporealpartners@gmail.com" class="hover:text-gold transition-colors">corporealpartners@gmail.com</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </footer>
+        </footer>
 
-    <script>
-    function restorePurchase() {
-        const email = prompt("Please enter the email you used to purchase:");
-        if (email) {
-            alert("We have sent a magic link to " + email + ". Click it to log in.");
-            // In a real app, you'd trigger an email. 
-            // For Hackathon/MVP: Just tell them to search their inbox for the Stripe Receipt!
-            alert("💡 Tip: Search your email for your 'Stripe Receipt' and click the link inside to get back in!");
+        <script>
+        // --- MOBILE MENU LOGIC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const links = menu.querySelectorAll('a'); // Select all links inside the menu
+
+            // 1. Toggle Menu Open/Close
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent immediate closing
+                menu.classList.toggle('hidden');
+            });
+
+            // 2. Close Menu When Clicking ANY Link inside it
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    menu.classList.add('hidden');
+                });
+            });
+
+            // 3. Close Menu When Clicking Outside
+            document.addEventListener('click', (e) => {
+                if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        });
+        // FAQ Toggle Function
+        function toggleIndexFaq(element) {
+            const content = element.querySelector('.faq-content');
+            const icon = element.querySelector('.faq-icon');
+            
+            // Toggle the hidden class
+            content.classList.toggle('hidden');
+            
+            // Rotate the arrow
+            icon.classList.toggle('rotate-180');
         }
-    }
-    </script>
 
-<script type="module" src="/index.tsx"></script>
-</body>
-</html>
+        // Restore Purchase Logic
+        function restorePurchase() {
+            const email = prompt("Please enter the email you used to purchase:");
+            if (email) {
+                alert("💡 Tip: Search your email for your 'Stripe Receipt' and click the link inside to access your customer portal!");
+            }
+        }
+        </script>
+    </body>
+    </html>

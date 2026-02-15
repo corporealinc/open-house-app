@@ -185,6 +185,12 @@
                     const wizardInput = document.getElementById('wizardInput');
                     document.getElementById('wizardContinueBtn')?.addEventListener('click', () => handleAnswer(wizardInput.dataset.key, wizardInput.value));
                     wizardInput?.addEventListener('keydown', e => { if(e.key === 'Enter') handleAnswer(wizardInput.dataset.key, wizardInput.value); });
+                    // --- FIX FOR IPHONE KEYBOARD ---
+                    // Try to focus immediately without timeout to keep the user interaction context
+                    if (wizardInput) {
+                        wizardInput.focus();
+                        wizardInput.click(); // Backup trigger for some iOS versions
+                    }
                     setTimeout(() => wizardInput?.focus(), 50);
                     break;
                 case 'SUCCESS':

@@ -10,7 +10,7 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Open House Sign-In - OpenHouseAI</title>
+    <title>Free Digital Open House Sign-In for Realtors | AI-Powered</title>
     <link rel="icon" type="image/png" href="images/logo.png" sizes="32x32">
     <link rel="icon" type="image/svg+xml" href="images/logo.svg">
     <link rel="apple-touch-icon" sizes="180x180" href="images/logo.png">
@@ -190,6 +190,12 @@
                     const wizardInput = get('wizardInput');
                     get('wizardContinueBtn')?.addEventListener('click', () => handleAnswer(wizardInput.dataset.key, wizardInput.value));
                     wizardInput?.addEventListener('keydown', e => { if(e.key === 'Enter') handleAnswer(wizardInput.dataset.key, wizardInput.value); });
+                    // --- FIX FOR IPHONE KEYBOARD ---
+                    // Try to focus immediately without timeout to keep the user interaction context
+                    if (wizardInput) {
+                        wizardInput.focus();
+                        wizardInput.click(); // Backup trigger for some iOS versions
+                    }
                     setTimeout(() => wizardInput?.focus(), 50);
                     break;
                 case 'SUCCESS':
